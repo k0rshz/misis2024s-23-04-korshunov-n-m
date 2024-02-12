@@ -1,1 +1,1 @@
-add_executable(a a.cpp)
+add_executable(0000a 0000a.cpp)
