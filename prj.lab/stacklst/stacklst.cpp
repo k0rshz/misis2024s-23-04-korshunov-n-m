@@ -4,7 +4,7 @@
 class StackLst {
 public:
 	StackLst() = default;
-	~StackLst() {};
+	~StackLst() { while (!IsEmpty()) { Pop(); } }; // правильно ли работает очищение памяти?
 	StackLst(const StackLst& rhs);
 	StackLst& operator=(const StackLst& rhs);
 	void Pop();
@@ -35,8 +35,10 @@ void StackLst::Push(const Complex& a) {
 	head_ = nhead;
 }
 
-void StackLst::Pop() {
+void StackLst::Pop() { // правильно ли работает очищение памяти?
+	Node* p = head_;
 	head_ = head_->next_;
+	delete p;
 }
 
 void StackLst::Clear() {
