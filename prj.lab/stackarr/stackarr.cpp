@@ -9,10 +9,11 @@ public:
 	}
 	StackArr(const StackArr& rhs);
 	StackArr& operator=(const StackArr& rhs);
-	void pop();
-	void push(const Complex& a);
-	bool isEmpty() const;
-	Complex& top();
+	void Pop();
+	void Push(const Complex& a);
+	bool IsEmpty() const;
+	Complex& Top();
+	void Clear();
 private:
 	Complex* data_ = nullptr;
 	int capacity_ = 0;
@@ -39,7 +40,7 @@ StackArr& StackArr::operator=(const StackArr& rhs) {
 	return *this;
 }
 
-void StackArr::push(const Complex& a) {
+void StackArr::Push(const Complex& a) {
 	if (topInd_ == capacity_ - 1) {
 		int ncapacity = (capacity_ + 1) * 2;
 		Complex* ndata = new Complex[ncapacity];
@@ -54,7 +55,7 @@ void StackArr::push(const Complex& a) {
 	data_[topInd_] = a;
 }
 
-void StackArr::pop() {
+void StackArr::Pop() {
 	Complex* ndata = new Complex[capacity_];
 	for (int i = 0; i < topInd_; ++i) {
 		ndata[i] = data_[i];
@@ -64,25 +65,31 @@ void StackArr::pop() {
 	data_ = ndata;
 }
 
-Complex& StackArr::top() {
+Complex& StackArr::Top() {
 	return data_[topInd_];
 }
 
-bool StackArr::isEmpty() const {
+bool StackArr::IsEmpty() const {
 	return topInd_ == -1;
+}
+
+void StackArr::Clear() {
+	data_ = nullptr;
+	capacity_ = 0;
+	topInd_ = -1;
 }
 
 int main() {
 	Complex a{ 1.5, 2.0 }, b{ 3.1, 4.9 }, c{ 2.8, 3.1 };
 	StackArr s;
-	std::cout << s.isEmpty() << std::endl;
-	s.push(a);
-	std::cout << s.isEmpty() << std::endl;
-	std::cout << s.top() << std::endl;
-	s.push(b);
-	std::cout << s.top() << std::endl;
-	s.pop();
-	std::cout << s.top() << std::endl;
-	s.push(c);
-	std::cout << s.top() << std::endl;
+	std::cout << s.IsEmpty() << std::endl;
+	s.Push(a);
+	std::cout << s.IsEmpty() << std::endl;
+	std::cout << s.Top() << std::endl;
+	s.Push(b);
+	std::cout << s.Top() << std::endl;
+	s.Pop();
+	std::cout << s.Top() << std::endl;
+	s.Push(c);
+	std::cout << s.Top() << std::endl;
 }
