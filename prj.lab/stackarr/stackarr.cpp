@@ -1,24 +1,4 @@
-#include "complex/complex.hpp"
-#include <iostream>
-
-class StackArr {
-public:
-	StackArr() = default;
-	~StackArr() {
-		delete[] data_;
-	}
-	StackArr(const StackArr& rhs);
-	StackArr& operator=(const StackArr& rhs);
-	void Pop();
-	void Push(const Complex& a);
-	bool IsEmpty() const;
-	Complex& Top();
-	void Clear();
-private:
-	Complex* data_ = nullptr;
-	int capacity_ = 0;
-	int topInd_ = -1;
-};
+#include "stackarr/stackarr.hpp"
 
 StackArr::StackArr(const StackArr& rhs) {
 	capacity_ = rhs.capacity_;
@@ -77,19 +57,4 @@ void StackArr::Clear() {
 	data_ = nullptr;
 	capacity_ = 0;
 	topInd_ = -1;
-}
-
-int main() {
-	Complex a{ 1.5, 2.0 }, b{ 3.1, 4.9 }, c{ 2.8, 3.1 };
-	StackArr s;
-	std::cout << s.IsEmpty() << std::endl;
-	s.Push(a);
-	std::cout << s.IsEmpty() << std::endl;
-	std::cout << s.Top() << std::endl;
-	s.Push(b);
-	std::cout << s.Top() << std::endl;
-	s.Pop();
-	std::cout << s.Top() << std::endl;
-	s.Push(c);
-	std::cout << s.Top() << std::endl;
 }
