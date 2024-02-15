@@ -36,6 +36,9 @@ void StackArr::Push(const Complex& a) {
 }
 
 void StackArr::Pop() {
+	if (topInd_ == -1) {
+		return;
+	}
 	Complex* ndata = new Complex[capacity_];
 	for (int i = 0; i < topInd_; ++i) {
 		ndata[i] = data_[i];

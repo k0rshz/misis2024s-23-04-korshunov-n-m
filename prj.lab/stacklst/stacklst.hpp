@@ -1,0 +1,21 @@
+#include "complex/complex.hpp"
+#include <iostream>
+
+class StackLst {
+public:
+	StackLst() = default;
+	~StackLst() { while (!IsEmpty()) { Pop(); } };
+	StackLst(const StackLst& rhs);
+	StackLst& operator=(const StackLst& rhs);
+	void Pop();
+	void Push(const Complex& a);
+	bool IsEmpty() const;
+	Complex& Top();
+	void Clear();
+private:
+	struct Node {
+		Complex v_;
+		Node* next_ = nullptr;
+	};
+	Node* head_ = nullptr;
+};

@@ -14,4 +14,8 @@ add_executable(test_stackarr test_stackarr.cpp)
 
 target_link_libraries(test_stackarr stackarr)
 
+add_executable(test_stacklst test_stacklst.cpp)
+
+target_link_libraries(test_stacklst stacklst)
+
 set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT test_rational)
