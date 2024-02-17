@@ -1,63 +1,66 @@
 #include "stackarr/stackarr.hpp"
 
 StackArr::StackArr(const StackArr& rhs) {
-	capacity_ = rhs.capacity_;
-	topInd_ = rhs.topInd_;
-	data_ = new Complex[capacity_];
-	for (int i = 0; i <= topInd_; ++i) {
+	size_ = rhs.size_;
+	i_top_ = rhs.i_top_;
+	data_ = new Complex[size_];
+	for (int i = 0; i <= i_top_; ++i) {
 		data_[i] = rhs.data_[i];
 	}
 }
 
 StackArr& StackArr::operator=(const StackArr& rhs) {
 	delete[] data_;
-	capacity_ = rhs.capacity_;
-	topInd_ = rhs.topInd_;
-	data_ = new Complex[capacity_];
-	for (int i = 0; i <= topInd_; ++i) {
+	size_ = rhs.size_;
+	i_top_ = rhs.i_top_;
+	data_ = new Complex[size_];
+	for (int i = 0; i <= i_top_; ++i) {
 		data_[i] = rhs.data_[i];
 	}
 	return *this;
 }
 
 void StackArr::Push(const Complex& a) {
-	if (topInd_ == capacity_ - 1) {
-		int ncapacity = (capacity_ + 1) * 2;
+	if (i_top_ == size_ - 1) {
+		int ncapacity = (size_ + 1) * 2;
 		Complex* ndata = new Complex[ncapacity];
-		for (int i = 0; i <= topInd_; ++i) {
+		for (int i = 0; i <= i_top_; ++i) {
 			ndata[i] = data_[i];
 		}
 		delete[] data_;
-		capacity_ = ncapacity;
+		size_ = ncapacity;
 		data_ = ndata;
 	}
-	topInd_ += 1;
-	data_[topInd_] = a;
+	i_top_ += 1;
+	data_[i_top_] = a;
 }
 
 void StackArr::Pop() {
-	if (topInd_ == -1) {
-		return;
+	if (!IsEmpty()) {
+		i_top_ -= 1;
 	}
-	Complex* ndata = new Complex[capacity_];
-	for (int i = 0; i < topInd_; ++i) {
-		ndata[i] = data_[i];
-	}
-	topInd_ -= 1;
-	delete[] data_;
-	data_ = ndata;
 }
 
 Complex& StackArr::Top() {
-	return data_[topInd_];
+	if (i_top_ < 0) {
+		throw std::logic_error("StackArr - try get top form empty stack.");
+	}
+	return data_[i_top_];
+}
+
+const Complex& StackArr::Top() const {
+	if (i_top_ < 0) {
+		throw std::logic_error("StackArr - try get top form empty stack.");
+	}
+	return data_[i_top_];
 }
 
 bool StackArr::IsEmpty() const {
-	return topInd_ == -1;
+	return i_top_ == -1;
 }
 
 void StackArr::Clear() {
 	data_ = nullptr;
-	capacity_ = 0;
-	topInd_ = -1;
+	size_ = 0;
+	i_top_ = -1;
 }

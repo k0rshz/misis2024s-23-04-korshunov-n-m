@@ -13,6 +13,16 @@ bool StackLst::IsEmpty() const {
 }
 
 Complex& StackLst::Top() {
+	if (head_ == nullptr) {
+		throw std::logic_error("StackArr - try get top form empty stack.");
+	}
+	return head_->v_;
+}
+
+const Complex& StackLst::Top() const {
+	if (head_ == nullptr) {
+		throw std::logic_error("StackArr - try get top form empty stack.");
+	}
 	return head_->v_;
 }
 

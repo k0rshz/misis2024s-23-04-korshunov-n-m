@@ -16,11 +16,12 @@ public:
 	void Push(const Complex& a);
 	bool IsEmpty() const;
 	Complex& Top();
+	const Complex& Top() const;
 	void Clear();
 private:
 	Complex* data_ = nullptr;
-	int capacity_ = 0;
-	int topInd_ = -1;
+	int size_ = 0;
+	int i_top_ = -1;
 };
 
 #endif

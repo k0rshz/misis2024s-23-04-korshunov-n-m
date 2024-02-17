@@ -1,3 +1,6 @@
+#pragma once
+#ifndef STACKLST_HPP
+#define STACKLST_HPP
 #include "complex/complex.hpp"
 #include <iostream>
 
@@ -11,6 +14,7 @@ public:
 	void Push(const Complex& a);
 	bool IsEmpty() const;
 	Complex& Top();
+	const Complex& Top() const;
 	void Clear();
 private:
 	struct Node {
@@ -19,3 +23,5 @@ private:
 	};
 	Node* head_ = nullptr;
 };
+
+#endif
