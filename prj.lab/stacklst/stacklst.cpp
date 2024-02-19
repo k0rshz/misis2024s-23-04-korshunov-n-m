@@ -1,12 +1,41 @@
 #include "stacklst/stacklst.hpp"
 
-//StackLst::StackLst(const StackLst& rhs) {
-//	if (rhs.head_ == nullptr) {
-//		head_ = nullptr;
-//		return;
-//	}
-//
-//}
+StackLst::StackLst(const StackLst& rhs) {
+	if (rhs.head_ == nullptr) {
+		head_ = nullptr;
+		return;
+	}
+	head_ = new Node;
+	head_->val = rhs.head_->val;
+	Node* a = head_;
+	Node* prev = head_;
+	while (a->next != nullptr) {
+		Node* nhead = new Node;
+		a = a->next;
+		prev->next = nhead;
+		a->val = a->val;
+		prev = nhead;
+	}
+}
+
+StackLst& StackLst::operator=(const StackLst& rhs) {
+	Clear();
+	if (rhs.head_ == nullptr) {
+		return *this;
+	}
+	head_ = new Node;
+	head_->val = rhs.head_->val;
+	Node* a = head_;
+	Node* prev = head_;
+	while (a->next != nullptr) {
+		Node* nhead = new Node;
+		a = a->next;
+		prev->next = nhead;
+		a->val = a->val;
+		prev = nhead;
+	}
+	return *this;
+}
 
 bool StackLst::IsEmpty() const {
 	return head_ == nullptr;
@@ -16,20 +45,20 @@ Complex& StackLst::Top() {
 	if (head_ == nullptr) {
 		throw std::logic_error("StackArr - try get top form empty stack.");
 	}
-	return head_->v_;
+	return head_->val;
 }
 
 const Complex& StackLst::Top() const {
 	if (head_ == nullptr) {
 		throw std::logic_error("StackArr - try get top form empty stack.");
 	}
-	return head_->v_;
+	return head_->val;
 }
 
 void StackLst::Push(const Complex& a) {
 	Node* nhead = new Node;
-	nhead->v_ = a;
-	nhead->next_ = head_;
+	nhead->val = a;
+	nhead->next = head_;
 	head_ = nhead;
 }
 
@@ -38,12 +67,14 @@ void StackLst::Pop() {
 		return;
 	}
 	Node* p = head_;
-	head_ = head_->next_;
+	head_ = head_->next;
 	delete p;
 }
 
 void StackLst::Clear() {
-	head_ = nullptr;
+	while (!IsEmpty()) {
+		Pop();
+	}
 }
 
 //int main() {

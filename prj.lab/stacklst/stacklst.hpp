@@ -18,8 +18,8 @@ public:
 	void Clear();
 private:
 	struct Node {
-		Complex v_;
-		Node* next_ = nullptr;
+		Complex val;
+		Node* next = nullptr;
 	};
 	Node* head_ = nullptr;
 };
