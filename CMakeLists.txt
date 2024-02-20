@@ -1,4 +1,4 @@
-project(misis2023f-23-04-korshunov-n-m)
+project(misis2024s-23-04-korshunov-n-m)
 
 cmake_minimum_required(VERSION 3.20)
 
