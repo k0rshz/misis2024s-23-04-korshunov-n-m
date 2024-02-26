@@ -18,4 +18,4 @@ add_executable(test_stacklst test_stacklst.cpp)
 
 target_link_libraries(test_stacklst stacklst)
 
-set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT test_rational)
+set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT test_stacklst)
