@@ -49,13 +49,41 @@ void QueueLst::Clear() {
 }
 
 QueueLst::QueueLst(const QueueLst& rhs) {
-	Node* temp = rhs.head_;
-	head_ = temp;
-	Node* prev = head_;
-	temp = temp->next;
-	while (temp != nullptr) {
-		prev->next = temp;
-		prev = prev->next;
-		temp = temp->next;
+	if (rhs.IsEmpty()) {
+		head_ = nullptr;
+		tail_ = nullptr;
+		return;
 	}
+
+	head_ = new Node;
+	Node* a = head_;
+	Node* b = rhs.head_;
+	while (b->next != nullptr) {
+		a->val = b->val;
+		b = b->next;
+		a->next = new Node;
+		a = a->next;
+	}
+	a->val = b->val;
+	tail_ = a;
+}
+
+QueueLst& QueueLst::operator=(const QueueLst& rhs) {
+	Clear();
+	if (rhs.IsEmpty()) {
+		return *this;
+	}
+
+	head_ = new Node;
+	Node* a = head_;
+	Node* b = rhs.head_;
+	while (b->next != nullptr) {
+		a->val = b->val;
+		b = b->next;
+		a->next = new Node;
+		a = a->next;
+	}
+	a->val = b->val;
+	tail_ = a;
+	return *this;
 }
