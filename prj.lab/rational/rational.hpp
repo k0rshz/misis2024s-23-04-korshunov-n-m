@@ -27,7 +27,7 @@ public:
 	Rational& operator*=(const std::int64_t rhs) { return operator*=(Rational(rhs)); }
 	Rational& operator/=(const Rational& rhs);
 	Rational& operator/=(const std::int64_t rhs) { return operator/=(Rational(rhs)); }
-	Rational& operator-();
+	Rational operator-() const { return { -num_, den_ }; }
 	bool operator==(const Rational& rhs) const { return ((rhs.num_ == num_) && (rhs.den_ == den_)) || ((rhs.num_ == 0) && (num_ == 0)); }
 	bool operator!=(const Rational& rhs) const { return !operator==(rhs); }
 	std::ostream& writeTo(std::ostream& ostrm) const;
@@ -39,6 +39,7 @@ public:
 private:
 	std::int64_t num_{ 0 };
 	std::int64_t den_{ 1 };
+	static const char sep_{ '/' };
 	void cut_back();
 	std::int64_t NOD(std::int64_t x, std::int64_t y);
 	std::int64_t NOK(std::int64_t x, std::int64_t y);

@@ -97,11 +97,6 @@ Rational& Rational::operator-=(const Rational& rhs) {
 	return *this;
 }
 
-Rational& Rational::operator-() {
-	num_ *= -1;
-	return *this;
-}
-
 Rational operator+(const Rational& lhs, const Rational& rhs) {
 	Rational sum(lhs);
 	sum += rhs;
@@ -186,31 +181,25 @@ Rational operator/(const std::int64_t& lhs, const Rational& rhs) {
 }
 
 bool operator==(const Rational& lhs, const std::int64_t& rhs) {
-	if (lhs.get_Num() == rhs && lhs.get_Den() == 1) {
+	if ((lhs.get_Num() == rhs && lhs.get_Den() == 1) || (lhs.get_Num() == 0 && rhs == 0)) {
 		return true;
 	}
 	return false;
 }
 
 bool operator==(const std::int64_t& lhs, const Rational& rhs) {
-	if (rhs.get_Num() == lhs && rhs.get_Den() == 1) {
+	if ((rhs.get_Num() == lhs && rhs.get_Den() == 1) || (rhs.get_Num() == 0 && lhs == 0)) {
 		return true;
 	}
 	return false;
 }
 
 bool operator!=(const Rational& lhs, const std::int64_t& rhs) {
-	if (lhs.get_Num() == rhs && lhs.get_Den() == 1) {
-		return false;
-	}
-	return true;
+	return !(lhs == rhs);
 }
 
 bool operator!=(const std::int64_t& lhs, const Rational& rhs) {
-	if (rhs.get_Num() == lhs && rhs.get_Den() == 1) {
-		return false;
-	}
-	return true;
+	return !(lhs == rhs);
 }
 
 bool operator>=(const Rational& lhs, const Rational& rhs) {
@@ -285,44 +274,52 @@ bool operator<(const std::int64_t& lhs, const Rational& rhs) {
 	return (a.get_Num() < 0);
 }
 
-bool testParse(const std::string& str) {
-	std::istringstream istrm(str);
-	Rational z;
-	istrm >> z;
-	if ((istrm.good()) || (!istrm.fail() && !istrm.bad() && istrm.eofbit)) {
-		std::cout << "Read success: " << str << " -> " << z << "\n";
-	}
-	else {
-		std::cout << "Read error: " << str << " -> " << z << "\n";
-	}
-	return istrm.good();
-}
-
 std::ostream& Rational::writeTo(std::ostream& ostrm) const {
-	ostrm << num_ << '/' << den_;
+	ostrm << num_ << Rational::sep_ << den_;
 	return ostrm;
 }
 
 std::istream& Rational::readFrom(std::istream& istrm) {
-	int64_t num(0);
-	char sep(0);
-	int64_t den(1);
+	std::int64_t num;
+	char sign;
+	std::int64_t den;
 	istrm >> num;
-	istrm.get(sep);
-	int64_t a = istrm.peek();
+	char after_num = istrm.peek();
+	istrm >> sign;
+	char after_sign = istrm.peek();
 	istrm >> den;
-	if (!istrm || a > '9' || a < '0') {
-		istrm.setstate(std::ios_base::failbit);
-		return istrm;
-	}
-	if (istrm.good() || istrm.eof()) {
-		if (sep == '/' && den > 0) {
+	bool no_spaces = (after_num == Rational::sep_)
+		&& (after_sign >= '0' && after_sign <= '9');
+
+	bool istrm_good = no_spaces &&
+		(istrm.good() || (!istrm.fail() && !istrm.bad() && istrm.eof()));
+
+	if (istrm_good) {
+		if (den > 0 && sign == Rational::sep_) {
 			num_ = num;
 			den_ = den;
+			cut_back();
 		}
 		else {
 			istrm.setstate(std::ios_base::failbit);
 		}
 	}
+	else (istrm.setstate(std::ios_base::failbit));
 	return istrm;
+}
+
+bool testParse(const std::string& str) {
+	using namespace std;
+	istringstream istrm(str);
+	Rational z;
+	istrm >> z;
+
+	bool istrm_good = istrm.good() || (!istrm.fail() && !istrm.bad());
+	if (istrm_good) {
+		cout << "Read success: " << str << endl;
+	}
+	else {
+		cout << "Read error : " << str << endl;
+	}
+	return istrm_good;
 }
