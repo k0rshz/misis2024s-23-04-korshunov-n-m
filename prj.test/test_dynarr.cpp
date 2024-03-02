@@ -8,7 +8,7 @@ TEST_CASE("dynarr ctor") {
     const int size = 5;
     DynArr arr_s(size);
     CHECK_EQ(arr_s.Size(), size);
-    //CHECK_THROWS(void(DynArr(0)));
+    CHECK_THROWS(void(DynArr(0)));
     CHECK_THROWS(void(DynArr(-size)));
 }
 

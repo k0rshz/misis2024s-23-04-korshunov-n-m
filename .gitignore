@@ -34,3 +34,10 @@
 #Others
 /.vs
 /out
+
+# Build folders
+build
+build.*
+bin
+bin.*
+build.bat
