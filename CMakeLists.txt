@@ -13,9 +13,8 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_RELWITHDEBINFO ${CMAKE_CURRENT_SOURCE_DIR}bin
 option(BUILD_WITH_CODEFORCES "Build prj.codeforces targets" off)
 option(BUILD_WITH_SAMPLES    "Build prj.cw sample targets"  off )
 
-if (BUILD_WITH_CODEFORCES)
-  add_subdirectory(prj.codeforces)
-endif()
+add_subdirectory(prj.codeforces)
+
 
 add_subdirectory(prj.lab)
 add_subdirectory(prj.test)
