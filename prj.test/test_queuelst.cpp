@@ -22,3 +22,4 @@ TEST_CASE("all") {
 	g.Pop();
 	CHECK(g.Top() == a);
 }
+//
