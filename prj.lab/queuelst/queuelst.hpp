@@ -9,6 +9,8 @@ public:
 	QueueLst() = default;
 	~QueueLst() { while (!IsEmpty()) { Pop(); } };
 	QueueLst(const QueueLst& rhs);
+	QueueLst(QueueLst&&);
+	QueueLst& operator=(QueueLst&&);
 	QueueLst& operator=(const QueueLst& rhs);
 	void Pop();
 	void Push(const Complex& a);

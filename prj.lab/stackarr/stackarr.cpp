@@ -9,6 +9,15 @@ StackArr::StackArr(const StackArr& rhs) {
 	}
 }
 
+StackArr::StackArr(StackArr&& other)
+	: data_{ other.data_ },
+	size_{ other.size_ },
+	i_top_{ other.i_top_ } {
+	other.data_ = nullptr;
+	other.i_top_ = -1;
+	other.size_ = 0;
+}
+
 StackArr& StackArr::operator=(const StackArr& rhs) {
 	delete[] data_;
 	size_ = rhs.size_;
@@ -16,6 +25,19 @@ StackArr& StackArr::operator=(const StackArr& rhs) {
 	data_ = new Complex[size_];
 	for (int i = 0; i <= i_top_; ++i) {
 		data_[i] = rhs.data_[i];
+	}
+	return *this;
+}
+
+StackArr& StackArr::operator=(StackArr&& other) {
+	if (this != &other) {
+		delete[] data_;
+		data_ = other.data_;
+		i_top_ = other.i_top_;
+		size_ = other.size_;
+		other.data_ = nullptr;
+		other.size_ = 0;
+		other.i_top_ = -1;
 	}
 	return *this;
 }

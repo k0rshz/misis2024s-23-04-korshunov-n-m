@@ -33,6 +33,24 @@ void QueueLst::Push(const Complex& a) {
 	}
 }
 
+QueueLst::QueueLst(QueueLst&& other) {
+	head_ = other.head_;
+	tail_ = other.tail_;
+	other.head_ = nullptr;
+	other.tail_ = nullptr;
+}
+
+QueueLst& QueueLst::operator=(QueueLst&& other) {
+	if (this != &other) {
+		Clear();
+		head_ = other.head_;
+		tail_ = other.tail_;
+		other.head_ = nullptr;
+		other.tail_ = nullptr;
+	}
+	return *this;
+}
+
 void QueueLst::Pop() {
 	if (head_ == nullptr) {
 		return;

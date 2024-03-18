@@ -18,6 +18,19 @@ StackLst::StackLst(const StackLst& rhs) {
 	}
 }
 
+StackLst::StackLst(StackLst&& other) : head_{ other.head_ } {
+	other.head_ = nullptr;
+}
+
+StackLst& StackLst::operator=(StackLst&& other) {
+	if (this != &other) {
+		Clear();
+		head_ = other.head_;
+		other.head_ = nullptr;
+	}
+	return *this;
+}
+
 StackLst& StackLst::operator=(const StackLst& rhs) {
 	Clear();
 	if (rhs.head_ == nullptr) {

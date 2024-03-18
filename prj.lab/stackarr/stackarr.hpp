@@ -12,6 +12,8 @@ public:
 	}
 	StackArr(const StackArr& rhs);
 	StackArr& operator=(const StackArr& rhs);
+	StackArr(StackArr&& other);
+	StackArr& operator=(StackArr&& other);
 	void Pop();
 	void Push(const Complex& a);
 	bool IsEmpty() const;

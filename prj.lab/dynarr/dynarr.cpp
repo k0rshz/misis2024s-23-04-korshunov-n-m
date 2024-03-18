@@ -5,11 +5,35 @@ std::ptrdiff_t DynArr::Size() const noexcept {
 }
 
 DynArr::DynArr(DynArr const& a)
-    : size_(a.size_), capacity(a.capacity) {
-    data_ = new float[capacity] {};
+    : size_(a.size_), capacity_(a.capacity_) {
+    data_ = new float[capacity_] {};
     for (int i = 0; i < size_; ++i) {
         data_[i] = a.data_[i];
     }
+}
+
+DynArr::DynArr(DynArr&& rhs) {
+    if (this != &rhs) {
+        data_ = rhs.data_;
+        size_ = rhs.size_;
+        capacity_ = rhs.capacity_;
+        rhs.data_ = nullptr;
+        rhs.size_ = 0;
+        rhs.capacity_ = 0;
+    }
+}
+
+DynArr& DynArr::operator=(DynArr&& rhs) {
+    if (this != &rhs) {
+        delete[] data_;
+        data_ = rhs.data_;
+        size_ = rhs.size_;
+        capacity_ = rhs.capacity_;
+        rhs.data_ = nullptr;
+        rhs.size_ = 0;
+        rhs.capacity_ = 0;
+    }
+    return *this;
 }
 
 DynArr::DynArr(const std::ptrdiff_t sizeNew) {
@@ -18,11 +42,11 @@ DynArr::DynArr(const std::ptrdiff_t sizeNew) {
     }
     else if (sizeNew == 0) {
         size_ = 0;
-        capacity = 0;
+        capacity_ = 0;
         data_ = nullptr;
     }
     size_ = sizeNew;
-    capacity = sizeNew * 2;
+    capacity_ = sizeNew * 2;
     data_ = new float[2 * sizeNew] {};
 }
 
@@ -30,8 +54,8 @@ DynArr& DynArr::operator=(DynArr const& rhs) {
     if (this != &rhs) {
         delete[] data_;
         size_ = rhs.size_;
-        capacity = rhs.size_ * 2;
-        data_ = new float[capacity] {};
+        capacity_ = rhs.size_ * 2;
+        data_ = new float[capacity_] {};
         for (int i = 0; i < rhs.size_; ++i) {
             data_[i] = rhs.data_[i];
         }
@@ -57,9 +81,9 @@ void DynArr::Resize(const std::ptrdiff_t sizeNew) {
     if (sizeNew <= 0) {
         throw std::overflow_error("Error: Size cannot be less than or equal to zero");
     }
-    if (sizeNew > capacity) {
-        capacity = sizeNew * 2;
-        float* pNewData = new float[capacity] {};
+    if (sizeNew > capacity_) {
+        capacity_ = sizeNew * 2;
+        float* pNewData = new float[capacity_] {};
         for (std::ptrdiff_t i = 0; i < this->size_; ++i) {
             pNewData[i] = data_[i];
         }

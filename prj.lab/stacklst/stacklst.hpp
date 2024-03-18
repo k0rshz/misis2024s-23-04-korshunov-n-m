@@ -10,6 +10,8 @@ public:
 	~StackLst() { while (!IsEmpty()) { Pop(); } };
 	StackLst(const StackLst& rhs);
 	StackLst& operator=(const StackLst& rhs);
+	StackLst(StackLst&& other);
+	StackLst& operator=(StackLst&& other);
 	void Pop();
 	void Push(const Complex& a);
 	bool IsEmpty() const;
