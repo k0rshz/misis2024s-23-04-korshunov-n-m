@@ -82,6 +82,7 @@ bool StackArr::IsEmpty() const {
 }
 
 void StackArr::Clear() {
+	delete[] data_;
 	data_ = nullptr;
 	size_ = 0;
 	i_top_ = -1;

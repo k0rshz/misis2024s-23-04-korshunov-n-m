@@ -22,4 +22,8 @@ add_executable(test_queuelst test_queuelst.cpp)
 
 target_link_libraries(test_queuelst queuelst)
 
+add_executable(test_queuearr test_queuearr.cpp)
+
+target_link_libraries(test_queuearr queuearr)
+
 set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT test_stacklst)
