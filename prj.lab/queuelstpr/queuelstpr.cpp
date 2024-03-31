@@ -75,3 +75,61 @@ void QueueLstPr::Push(const float& rhs) {
 		}
 	}
 }
+
+QueueLstPr::QueueLstPr(const QueueLstPr& rhs) {
+	if (rhs.IsEmpty()) {
+		head_ = nullptr;
+		tail_ = nullptr;
+		return;
+	}
+
+	head_ = new Node;
+	Node* a = head_;
+	Node* b = rhs.head_;
+	while (b->next != nullptr) {
+		a->val = b->val;
+		b = b->next;
+		a->next = new Node;
+		a = a->next;
+	}
+	a->val = b->val;
+	tail_ = a;
+}
+
+QueueLstPr& QueueLstPr::operator=(const QueueLstPr& rhs) {
+	Clear();
+	if (rhs.IsEmpty()) {
+		return *this;
+	}
+
+	head_ = new Node;
+	Node* a = head_;
+	Node* b = rhs.head_;
+	while (b->next != nullptr) {
+		a->val = b->val;
+		b = b->next;
+		a->next = new Node;
+		a = a->next;
+	}
+	a->val = b->val;
+	tail_ = a;
+	return *this;
+}
+
+QueueLstPr::QueueLstPr(QueueLstPr&& other) {
+	head_ = other.head_;
+	tail_ = other.tail_;
+	other.head_ = nullptr;
+	other.tail_ = nullptr;
+}
+
+QueueLstPr & QueueLstPr::operator=(QueueLstPr&& other) {
+	if (this != &other) {
+		Clear();
+		head_ = other.head_;
+		tail_ = other.tail_;
+		other.head_ = nullptr;
+		other.tail_ = nullptr;
+	}
+	return *this;
+}

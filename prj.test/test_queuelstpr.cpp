@@ -10,7 +10,11 @@ TEST_CASE("all") {
 	CHECK(s.Top() == a);
 	s.Push(b);
 	CHECK(s.Top() == b);
+	QueueLstPr g(s);
+	g.Pop();
+	CHECK(g.Top() == a);
 	s.Pop();
+	g = s;
 	CHECK(s.Top() == a);
 	s.Push(b);
 	s.Push(c);
