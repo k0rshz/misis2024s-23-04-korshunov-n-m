@@ -1,0 +1,24 @@
+#pragma once
+#ifndef MATRIX_HPP
+#define MATRIX_HPP
+#include <iostream>
+#include <vector>
+
+class Matrix {
+public:
+	Matrix() = default;
+	Matrix(int rows, int cols);
+	~Matrix() = default;
+	Matrix(const Matrix&) = default;
+	Matrix& operator=(const Matrix&) = default;
+	double& at(int row, int col);
+	const double& at(int row, int col) const;
+
+	void multi(double a);
+private:
+	std::vector<std::vector<double>> data_{ {} };
+	int rows_ = 0;
+	int cols_ = 0;
+};
+
+#endif
