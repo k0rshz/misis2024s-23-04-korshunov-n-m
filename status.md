@@ -1,4 +1,4 @@
-CHECK: 20240405-170121
+CHECK: 20240406-031816
 STATUS: lab complex - test-ok
 STATUS: lab complex_io - test-ok
 STATUS: lab complex_m - test-ok
@@ -10,7 +10,7 @@ STATUS: lab dynarr_m - test-ok
 STATUS: lab stackarr - test-ok
 STATUS: lab stackarr_m - test-ok
 STATUS: lab stacklst - test-failed
-STATUS: lab stacklst_m - test-ok
+STATUS: lab stacklst_m - test-failed
 STATUS: lab queuearr - test-failed
 STATUS: lab queuearr_m - test-ok
 STATUS: lab queuelst - test-ok
