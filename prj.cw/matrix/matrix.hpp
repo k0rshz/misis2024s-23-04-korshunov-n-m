@@ -15,6 +15,9 @@ public:
 	const double& at(int row, int col) const;
 
 	void multi(double a);
+	void transpose();
+	Matrix getMinor(int row, int col);
+	double determinant();
 private:
 	std::vector<std::vector<double>> data_{ {} };
 	int rows_ = 0;
