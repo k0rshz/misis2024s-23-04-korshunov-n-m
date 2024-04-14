@@ -3,6 +3,7 @@
 #define STACKLST_HPP
 #include "complex/complex.hpp"
 #include <iostream>
+#include <algorithm>
 
 class StackLst {
 public:

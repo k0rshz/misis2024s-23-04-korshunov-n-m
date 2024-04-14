@@ -1,20 +1,18 @@
 #include "stacklst/stacklst.hpp"
 
-StackLst::StackLst(const StackLst& rhs) {
-	if (rhs.head_ == nullptr) {
-		head_ = nullptr;
-		return;
-	}
-	head_ = new Node;
-	head_->val = rhs.head_->val;
-	Node* a = head_;
-	Node* prev = head_;
-	while (a->next != nullptr) {
-		Node* nhead = new Node;
-		a = a->next;
-		prev->next = nhead;
-		a->val = a->val;
-		prev = nhead;
+StackLst::StackLst(const StackLst& other) : head_{ nullptr } {
+	if (!other.IsEmpty()) {
+		head_ = new Node;
+		head_->val = other.head_->val;
+		Node* temp = other.head_;
+		Node* prev = head_;
+		while (temp->next != nullptr) {
+			temp = temp->next;
+			Node* curr = new Node;
+			prev->next = curr;
+			curr->val = temp->val;
+			prev = curr;
+		}
 	}
 }
 
@@ -31,21 +29,22 @@ StackLst& StackLst::operator=(StackLst&& other) {
 	return *this;
 }
 
-StackLst& StackLst::operator=(const StackLst& rhs) {
-	Clear();
-	if (rhs.head_ == nullptr) {
-		return *this;
-	}
-	head_ = new Node;
-	head_->val = rhs.head_->val;
-	Node* a = head_;
-	Node* prev = head_;
-	while (a->next != nullptr) {
-		Node* nhead = new Node;
-		a = a->next;
-		prev->next = nhead;
-		a->val = a->val;
-		prev = nhead;
+StackLst& StackLst::operator=(const StackLst& other) {
+	if (this != &other) {
+		Clear();
+		if (!other.IsEmpty()) {
+			head_ = new Node;
+			head_->val = other.head_->val;
+			Node* temp = other.head_;
+			Node* prev = head_;
+			while (temp->next != nullptr) {
+				temp = temp->next;
+				Node* curr = new Node;
+				prev->next = curr;
+				curr->val = temp->val;
+				prev = curr;
+			}
+		}
 	}
 	return *this;
 }
