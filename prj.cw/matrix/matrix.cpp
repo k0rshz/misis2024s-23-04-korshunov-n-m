@@ -8,10 +8,16 @@ Matrix::Matrix(int rows, int cols) {
 }
 
 double& Matrix::at(int row, int col) {
+	if (row < 0 || row >= rows_ || col < 0 || col >= cols_) {
+		throw std::out_of_range("Index out of range");
+	}
 	return data_[row][col];
 }
 
 const double& Matrix::at(int row, int col) const {
+	if (row < 0 || row >= rows_ || col < 0 || col >= cols_) {
+		throw std::out_of_range("Index out of range");
+	}
 	return data_[row][col];
 }
 
@@ -72,4 +78,52 @@ double Matrix::determinant() {
 		sign = -sign;
 	}
 	return det;
+}
+
+Matrix Matrix::multiply(const Matrix& other) {
+	if (cols_ != other.rows_) {
+		throw std::invalid_argument("Number of columns in the first matrix must be equal to the number of rows in the second matrix");
+	}
+
+	Matrix result(rows_, other.cols_);
+
+	for (int i = 0; i < rows_; ++i) {
+		for (int j = 0; j < other.cols_; ++j) {
+			double sum = 0;
+			for (int k = 0; k < cols_; ++k) {
+				sum += data_[i][k] * other.data_[k][j];
+			}
+			result.at(i, j) = sum;
+		}
+	}
+
+	return result;
+}
+
+Matrix Matrix::degree(int a) {
+	Matrix res(*this);
+	Matrix temp(res);
+	for (int i = 0; i < a - 1; ++i) {
+		res = res.multiply(temp);
+	}
+	return res;
+}
+
+void Matrix::swapRows(int a, int b) {
+	double c;
+	for (int i = 0; i < cols_; ++i) {
+		c = data_[a][i];
+		data_[a][i] = data_[b][i];
+		data_[b][i] = c;
+	}
+}
+
+void Matrix::print() {
+	for (int i = 0; i < rows_; ++i) {
+		for (int j = 0; j < cols_; ++j) {
+			std::cout << data_[i][j] << " ";
+		}
+		std::cout << "\n";
+	}
+	std::cout << "\n";
 }

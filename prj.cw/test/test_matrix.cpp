@@ -9,27 +9,11 @@ int main() {
 			a.at(i, j) = k;
 		}
 	}
-	for (int i = 0; i < 3; ++i) {
-		for (int j = 0; j < 3; ++j) {
-			std::cout << a.at(i, j) << " ";
-		}
-		std::cout << "\n";
-	}
+	a.print();
 	a.multi(0.1);
-	for (int i = 0; i < 3; ++i) {
-		for (int j = 0; j < 3; ++j) {
-			std::cout << a.at(i, j) << " ";
-		}
-		std::cout << "\n";
-	}
-	std::cout << "\n";
+	a.print();
 	a.transpose();
-	for (int i = 0; i < 3; ++i) {
-		for (int j = 0; j < 3; ++j) {
-			std::cout << a.at(i, j) << " ";
-		}
-		std::cout << "\n";
-	}
+	a.print();
 
 	k = 0;
 	Matrix c(2, 2);
@@ -39,9 +23,12 @@ int main() {
 			c.at(i, j) = k;
 		}
 	}
-	std::cout << "\n";
+	c.print();
 	std::cout << c.determinant();
 	std::cout << "\n" << "\n";
+	
+	Matrix d(c.degree(2));
+	d.print();
 
 	Matrix b(3, 2);
 	k = 0;
@@ -51,27 +38,13 @@ int main() {
 			b.at(i, j) = k;
 		}
 	}
-	for (int i = 0; i < 3; ++i) {
-		for (int j = 0; j < 2; ++j) {
-			std::cout << b.at(i, j) << " ";
-		}
-		std::cout << "\n";
-	}
-	std::cout << "\n";
+	b.print();
 	b.multi(0.1);
-	for (int i = 0; i < 3; ++i) {
-		for (int j = 0; j < 2; ++j) {
-			std::cout << b.at(i, j) << " ";
-		}
-		std::cout << "\n";
-	}
-	std::cout << "\n";
+	b.print();
 	b.transpose();
-	for (int i = 0; i < 2; ++i) {
-		for (int j = 0; j < 3; ++j) {
-			std::cout << b.at(i, j) << " ";
-		}
-		std::cout << "\n";
-	}
+	b.print();
+	b.swapRows(0, 1);
+	b.print();
+
 	return 0;
 }

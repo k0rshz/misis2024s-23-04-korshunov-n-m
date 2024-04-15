@@ -18,6 +18,10 @@ public:
 	void transpose();
 	Matrix getMinor(int row, int col);
 	double determinant();
+	Matrix multiply(const Matrix& other);
+	Matrix degree(int a);
+	void swapRows(int a, int b);
+	void print();
 private:
 	std::vector<std::vector<double>> data_{ {} };
 	int rows_ = 0;
