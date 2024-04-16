@@ -12,8 +12,11 @@ int main() {
 	a.print();
 	a.multi(0.1);
 	a.print();
+	std::cout << a.determinant() << "\n" << "\n"; // проверить это место
+	//std::cout << a.rank() << "\n" << "\n";
 	a.transpose();
 	a.print();
+	//std::cout << a.rank() << "\n" << "\n";
 
 	k = 0;
 	Matrix c(2, 2);
@@ -29,6 +32,9 @@ int main() {
 	
 	Matrix d(c.degree(2));
 	d.print();
+
+	c.inverse();
+	c.print();
 
 	Matrix b(3, 2);
 	k = 0;

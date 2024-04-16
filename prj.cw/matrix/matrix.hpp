@@ -22,6 +22,11 @@ public:
 	Matrix degree(int a);
 	void swapRows(int a, int b);
 	void print();
+	void clear();
+	int rank();
+	void addRowMultiple(int a, int b, double k);
+	void inverse();
+	Matrix identity();
 private:
 	std::vector<std::vector<double>> data_{ {} };
 	int rows_ = 0;

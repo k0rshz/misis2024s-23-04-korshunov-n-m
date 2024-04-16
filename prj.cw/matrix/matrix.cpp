@@ -127,3 +127,106 @@ void Matrix::print() {
 	}
 	std::cout << "\n";
 }
+
+void Matrix::clear() {
+	for (int i = 0; i < rows_; ++i) {
+		for (int j = 0; j < cols_; ++j) {
+			data_[i][j] = 0;
+		}
+		std::cout << "\n";
+	}
+}
+
+void Matrix::addRowMultiple(int a, int b, double k) {
+	if (a < 0 || a >= rows_ || b < 0 || b >= rows_) {
+		throw std::out_of_range("Row index out of range");
+	}
+	for (int i = 0; i < cols_; ++i) {
+		data_[b][i] += data_[a][i] * k;
+	}
+}
+
+//int Matrix::rank() {
+//	Matrix temp(*this);
+//	int rank = 0;
+//	for (int i = 0; i < temp.cols_; ++i) {
+//		bool nZero = false;
+//		for (int j = rank; j < temp.rows_; ++j) {
+//			if (std::abs(temp.data_[j][i]) > 1e-9) {
+//				nZero = true;
+//				if (j != rank) {
+//					temp.swapRows(j, rank);
+//				}
+//				break;
+//			}
+//		}
+//		if (nZero) {
+//			for (int j = rank + 1; j < temp.rows_; ++j) { 
+//				if (std::abs(temp.data_[j][i]) > 1e-9) {
+//					double k = -temp.data_[j][i] / temp.data_[rank][i];
+//					temp.addRowMultiple(j, rank, k);
+//				}
+//			}
+//			rank += 1;
+//		}
+//	}
+//	return rank;
+//}
+
+Matrix Matrix::identity() {
+	Matrix res(rows_, cols_);
+	for (int i = 0; i < rows_; ++i) {
+		for (int j = 0; j < cols_; ++j) {
+			if (i == j) {
+				res.at(i, j) = 1;
+			}
+		}
+	}
+	return res;
+}
+
+void Matrix::inverse() {
+	if (rows_ != cols_) {
+		throw std::invalid_argument("Inverse can only be calculated for a square matrix");
+	}
+	Matrix temp(*this);
+	Matrix identity = Matrix::identity();
+	for (int i = 0; i < rows_; ++i) {
+		double a = data_[i][i];
+		if (a == 0) {
+			int idx = -1;
+			for (int j = i + 1; j < rows_; ++j) {
+				if (data_[j][i] != 0) {
+					idx = j;
+					break;
+				}
+			}
+			if (idx == -1) {
+				throw std::runtime_error("Matrix is not invertible");
+			}
+			swapRows(i, idx);
+			identity.swapRows(i, idx);
+			a = data_[i][i];
+		}
+		for (int j = 0; j < cols_; ++j) {
+			data_[i][j] /= a;
+			identity.data_[i][j] /= a;
+		}
+		for (int j = 0; j < rows_; ++j) {
+			if (j != i) {
+				double k = data_[j][i];
+				for (int l = 0; l < cols_; ++l) {
+					data_[j][l] -= k * data_[i][l];
+					identity.data_[j][l] -= k * identity.data_[i][l];
+				}
+			}
+		}
+	}
+	for (int i = 0; i < rows_; ++i) {
+		for (int j = 0; j < cols_; ++j) {
+			data_[i][j] = identity.data_[i][j];
+		}
+	}
+
+}
+
