@@ -77,6 +77,9 @@ double Matrix::determinant() {
 		det += sign * data_[0][i] * temp.determinant();
 		sign = -sign;
 	}
+	if (abs(det) < 1e-9) {
+		return 0;
+	}
 	return det;
 }
 
@@ -146,32 +149,51 @@ void Matrix::addRowMultiple(int a, int b, double k) {
 	}
 }
 
-//int Matrix::rank() {
-//	Matrix temp(*this);
-//	int rank = 0;
-//	for (int i = 0; i < temp.cols_; ++i) {
-//		bool nZero = false;
-//		for (int j = rank; j < temp.rows_; ++j) {
-//			if (std::abs(temp.data_[j][i]) > 1e-9) {
-//				nZero = true;
-//				if (j != rank) {
-//					temp.swapRows(j, rank);
-//				}
-//				break;
-//			}
-//		}
-//		if (nZero) {
-//			for (int j = rank + 1; j < temp.rows_; ++j) { 
-//				if (std::abs(temp.data_[j][i]) > 1e-9) {
-//					double k = -temp.data_[j][i] / temp.data_[rank][i];
-//					temp.addRowMultiple(j, rank, k);
-//				}
-//			}
-//			rank += 1;
-//		}
-//	}
-//	return rank;
-//}
+int Matrix::rank() {
+	Matrix temp = *this;
+	int rank = std::min(cols_, rows_);
+	for (int row = 0; row < rank; ++row) {
+		if (temp.data_[row][row] == 0) {
+			bool found = false;
+			for (int i = row + 1; i < temp.rows_; ++i) {
+				if (temp.data_[i][row] != 0) {
+					temp.swapRows(row, i);
+					found = true;
+					break;
+				}
+			}
+			if (!found) {
+				rank -= 1;
+				row -= 1;
+				continue;
+			}
+		}
+		for (int i = 0; i < temp.rows_; ++i) {
+			if (i != row) {
+				double factor = temp.data_[i][row] / temp.data_[row][row];
+				for (int j = row; j < temp.cols_; ++j) {
+					temp.data_[i][j] -= temp.data_[row][j] * factor;
+				}
+			}
+		}
+	}
+
+	int rank1 = 0;
+	for (int i = 0; i < temp.rows_; ++i) {
+		bool isZero = true;
+		for (int j = 0; j < temp.cols_; ++j) {
+			if (abs(temp.data_[i][j]) > 1e-9) {
+				isZero = false;
+				break;
+			}
+		}
+		if (!isZero) {
+			rank1 += 1;
+		}
+	}
+
+	return rank1;
+}
 
 Matrix Matrix::identity() {
 	Matrix res(rows_, cols_);

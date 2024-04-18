@@ -13,10 +13,10 @@ int main() {
 	a.multi(0.1);
 	a.print();
 	std::cout << a.determinant() << "\n" << "\n"; // проверить это место
-	//std::cout << a.rank() << "\n" << "\n";
+	std::cout << a.rank() << "\n" << "\n";
 	a.transpose();
 	a.print();
-	//std::cout << a.rank() << "\n" << "\n";
+	std::cout << a.rank() << "\n" << "\n";
 
 	k = 0;
 	Matrix c(2, 2);
@@ -51,6 +51,7 @@ int main() {
 	b.print();
 	b.swapRows(0, 1);
 	b.print();
+	std::cout << b.rank() << "\n";
 
 	return 0;
 }
