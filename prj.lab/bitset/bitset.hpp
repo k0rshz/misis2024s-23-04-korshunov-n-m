@@ -6,6 +6,7 @@
 #include <vector>
 
 class BitSet {
+public:
 	BitSet() = default;
 	BitSet(const BitSet&) = default;
 	BitSet(BitSet&&) = default;
