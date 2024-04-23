@@ -1,5 +1,4 @@
-Unable to find executable: D:/.dima/misis2023f-23-check/misis2024s-23-04-korshunov-n-m/bin.check/doctest_bitset.exe
-Unable to find executable: D:/.dima/misis2023f-23-check/misis2024s-23-04-korshunov-n-m/bin.check/doctest_bitset_m.exe
+Unable to find executable: D:/projects/misis2023f-23-check/misis2024s-23-04-korshunov-n-m/bin.check/doctest_bitset.exe
 Errors while running CTest
-Output from these tests are in: D:/.dima/misis2023f-23-check/misis2024s-23-04-korshunov-n-m/build.check/Testing/Temporary/LastTest.log
+Output from these tests are in: D:/projects/misis2023f-23-check/misis2024s-23-04-korshunov-n-m/build.check/Testing/Temporary/LastTest.log
 Use "--rerun-failed --output-on-failure" to re-run the failed cases verbosely.
