@@ -13,7 +13,7 @@ set(PRJ_HEADERS )
 # add all source files (.cpp) to this, except the one with main()
 set(PRJ_SOURCES )
 # set the source file containing main()
-set(PRJ_MAIN src/test.cpp)
+set(PRJ_MAIN app/matrix_calculator.cpp)
 
 # add library targets here
 set(PRJ_LIBRARIES 
@@ -45,5 +45,5 @@ target_link_libraries(${PROJECT_NAME} PRIVATE ${PRJ_LIBRARIES})
 
 set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT ${PRJ_MAIN})
 
-#add_subdirectory(test)
-#add_subdirectory(matrix)
+add_subdirectory(test)
+add_subdirectory(matrix)

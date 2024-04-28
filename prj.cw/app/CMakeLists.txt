@@ -1,0 +1,2 @@
+add_executable(matrix_calculator matrix_calculator.cpp)
+target_link_libraries(matrix_calculator matrix)
