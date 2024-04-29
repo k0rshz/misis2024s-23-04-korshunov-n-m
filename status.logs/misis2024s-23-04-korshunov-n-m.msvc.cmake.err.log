@@ -4,3 +4,17 @@ CMake Warning (dev) at CMakeLists.txt:1 (project):
   both commands.
 This warning is for project developers.  Use -Wno-dev to suppress it.
 
+CMake Error at D:/programs/vcpkg/scripts/buildsystems/vcpkg.cmake:859 (_find_package):
+  Could not find a package configuration file provided by "fmt" with any of
+  the following names:
+
+    fmtConfig.cmake
+    fmt-config.cmake
+
+  Add the installation prefix of "fmt" to CMAKE_PREFIX_PATH or set "fmt_DIR"
+  to a directory containing one of the above files.  If "fmt" provides a
+  separate development package or SDK, be sure it has been installed.
+Call Stack (most recent call first):
+  prj.cw/CMakeLists.txt:35 (find_package)
+
+
