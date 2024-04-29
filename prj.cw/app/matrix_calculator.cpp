@@ -15,6 +15,7 @@
 #include <fmt/core.h>
 
 
+
 int main(int, char**)
 {
     // Setup SDL
@@ -153,33 +154,32 @@ int main(int, char**)
 
             ImGui::Begin(u8"Матричный калькулятор");                          // Create a window called "Hello, world!" and append into it.
 
-            ImGui::Text(u8"\t\t\t\t\t\t\t\t\tМатрица A");               // Display some text (you can use a format strings too)
+            ImGui::Text(u8"\t\t\t\t\t\t\t\t\t\tМатрица A");               // Display some text (you can use a format strings too)
 
             const float cellSize = 30.0f; // Размер каждой маленькой ячейки
-            ImDrawList* drawList = ImGui::GetWindowDrawList();
             ImVec2 windowSize = ImGui::GetWindowSize();
-            int matrix[3][3] = { {1, 2, 3}, {4, 5, 6}, {7, 8, 9} };
-            ImVec2 startPos((windowSize.x - cellSize * 3 - 10) / 2 - 15, (windowSize.y - cellSize * 3 - 10) / 2 - 60);
-            const float inputWidth = 30.0f;
-
+            double matrix[3][3] = { {1, 2, 3}, {4, 5, 6}, {7, 8, 9} };
+            double tempMatrix[3][3];
+            ImVec2 startPos((windowSize.x - cellSize * 3 - 45) / 2 - 15, (windowSize.y - cellSize * 3 - 10) / 2 - 60);
+            const float inputWidth = 50.0f;
+            bool valueChanged = false;
             for (int i = 0; i < 3; i++) {
                 for (int j = 0; j < 3; j++) {
-                    // Рисуем маленькую ячейку
-                    //drawList->AddRectFilled(startPos, ImVec2(startPos.x + cellSize, startPos.y + cellSize), IM_COL32(255, 255, 255, 255));
                     ImGui::PushID(i * 3 + j);
                     ImGui::SetCursorPos(startPos);
                     ImGui::SetNextItemWidth(inputWidth);
-                    ImGui::InputInt("##cell", &matrix[i][j], 0, 0, 0);
+                    if (ImGui::InputDouble("##cell", &tempMatrix[i][j], 0, 0, "%f")) {
+                        valueChanged = true;
+                        matrix[i][j] = tempMatrix[i][j];
+                    }
                     ImGui::PopID();
-
-                    // Отображаем цифру
-                    //drawList->AddText(ImVec2(startPos.x + 7, startPos.y + 7), IM_COL32(0, 0, 0, 255), std::to_string(matrix[i][j]).c_str());
          
-                    startPos.x += cellSize + 5.0f; // Увеличиваем X координату для следующей ячейки
+                    startPos.x += cellSize + 25.0f; // Увеличиваем X координату для следующей ячейки
                 }
-                startPos.x = (windowSize.x - cellSize * 3 - 10) / 2 - 15; // Возвращаем X координату в начало строки
+                startPos.x = (windowSize.x - cellSize * 3 - 45) / 2 - 15; // Возвращаем X координату в начало строки
                 startPos.y += cellSize + 5.0f; // Увеличиваем Y координату для следующей строки
             }
+
 
             
             //ImGui::Checkbox("Demo Window", &show_demo_window);      // Edit bools storing our window open/close state
