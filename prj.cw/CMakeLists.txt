@@ -43,6 +43,8 @@ find_package(OpenGL REQUIRED)
 add_executable(${PROJECT_NAME} ${PRJ_HEADERS} ${PRJ_SOURCES} ${PRJ_MAIN})
 target_link_libraries(${PROJECT_NAME} PRIVATE ${PRJ_LIBRARIES})
 
+target_link_libraries(${PROJECT_NAME}  PRIVATE matrix)
+
 set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT ${PRJ_MAIN})
 
 add_subdirectory(test)

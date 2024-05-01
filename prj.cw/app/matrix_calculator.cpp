@@ -1,7 +1,7 @@
 // ImGui + SDL2
 #define SDL_MAIN_HANDLED
 
-#include "C:\Users\narut\source\repos\misis2024s-23-04-korshunov-n-m\prj.cw\matrix\matrix.hpp"
+#include "matrix/matrix.hpp"
 #include <SDL2/SDL.h>
 #include <imgui.h>
 #include <imgui_impl_opengl3.h>
@@ -119,6 +119,8 @@ int main(int, char**)
     io.IniFilename = nullptr;
     EMSCRIPTEN_MAINLOOP_BEGIN
 #else
+    Matrix m(3, 3);
+    char userInput[20];
     while (!done)
 #endif
     {
@@ -135,6 +137,28 @@ int main(int, char**)
                 done = true;
             if (event.type == SDL_WINDOWEVENT && event.window.event == SDL_WINDOWEVENT_CLOSE && event.window.windowID == SDL_GetWindowID(window))
                 done = true;
+            if (event.type == SDL_TEXTINPUT && ImGui::GetIO().WantCaptureKeyboard) {
+                if (event.text.text[0] == '\b' && strlen(userInput) > 0) {
+                    // Удаляем последний символ при нажатии Backspace
+                    userInput[strlen(userInput) - 1] = '\0';
+                }
+                else if (event.text.text[0] >= 32 && event.text.text[0] <= 126 && strlen(userInput) < 19) {
+                    // Добавляем символ в пользовательский ввод
+                    strncat(userInput, reinterpret_cast<const char*>(&event.text.text), 1);
+                }
+
+                // Обновляем значение в активной ячейке
+                if (ImGui::IsAnyItemActive()) {
+                    int index = strlen(userInput) > 0 ? atoi(userInput) : 0;
+                    for (int i = 0; i < 3; i++) {
+                        for (int j = 0; j < 3; j++) {
+                            if (ImGui::IsItemActive()) {
+                                m.at(i, j) = static_cast<double>(index);
+                            }
+                        }
+                    }
+                }
+            }
         }
 
         // Start the Dear ImGui frame
@@ -158,29 +182,22 @@ int main(int, char**)
 
             const float cellSize = 30.0f; // Размер каждой маленькой ячейки
             ImVec2 windowSize = ImGui::GetWindowSize();
-            double matrix[3][3] = { {1, 2, 3}, {4, 5, 6}, {7, 8, 9} };
-            double tempMatrix[3][3];
+            //Matrix m(3, 3);
+            //double matrix[3][3];
             ImVec2 startPos((windowSize.x - cellSize * 3 - 45) / 2 - 15, (windowSize.y - cellSize * 3 - 10) / 2 - 60);
             const float inputWidth = 50.0f;
-            bool valueChanged = false;
             for (int i = 0; i < 3; i++) {
                 for (int j = 0; j < 3; j++) {
-                    ImGui::PushID(i * 3 + j);
+
                     ImGui::SetCursorPos(startPos);
                     ImGui::SetNextItemWidth(inputWidth);
-                    if (ImGui::InputDouble("##cell", &tempMatrix[i][j], 0, 0, "%f")) {
-                        valueChanged = true;
-                        matrix[i][j] = tempMatrix[i][j];
-                    }
-                    ImGui::PopID();
+                    ImGui::InputDouble(("##cell" + std::to_string(i) + std::to_string(j)).c_str(), &m.at(i, j), 0, 0, "%f");
          
                     startPos.x += cellSize + 25.0f; // Увеличиваем X координату для следующей ячейки
                 }
                 startPos.x = (windowSize.x - cellSize * 3 - 45) / 2 - 15; // Возвращаем X координату в начало строки
                 startPos.y += cellSize + 5.0f; // Увеличиваем Y координату для следующей строки
             }
-
-
             
             //ImGui::Checkbox("Demo Window", &show_demo_window);      // Edit bools storing our window open/close state
             //ImGui::Checkbox("Another Window", &show_another_window);
@@ -190,8 +207,9 @@ int main(int, char**)
             ImGui::Dummy(ImVec2(100.0f, 10.0f));
             ImGui::Dummy(ImVec2(10.0f, 0));
             ImGui::SameLine();
-            if (ImGui::Button(u8"Очистить"))
-                void;
+            if (ImGui::Button(u8"Очистить")) {
+                m.clear();
+            }
             ImGui::SameLine();
             ImGui::Dummy(ImVec2(115.0f, 0));
             ImGui::SameLine();
@@ -211,7 +229,7 @@ int main(int, char**)
             ImGui::Dummy(ImVec2(10.0f, 0));
             ImGui::SameLine();
             if (ImGui::Button(u8"Транспонировать"))
-                void;
+                m.transpose();
             ImGui::SameLine();
             ImGui::Dummy(ImVec2(61.0f, 0));
             ImGui::SameLine();
