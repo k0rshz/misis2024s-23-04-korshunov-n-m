@@ -120,7 +120,9 @@ int main(int, char**)
     EMSCRIPTEN_MAINLOOP_BEGIN
 #else
     Matrix m(3, 3);
+    double multiplier = 1.0f;
     char userInput[20];
+    int degree = 1;
     while (!done)
 #endif
     {
@@ -224,8 +226,10 @@ int main(int, char**)
             ImGui::Dummy(ImVec2(104.0f, 0));
             ImGui::SameLine();
             if (ImGui::Button(u8"Умножить на"))
-                void;
-
+                m.multi(multiplier);
+            ImGui::SameLine();
+            ImGui::SetNextItemWidth(40);
+            ImGui::InputDouble("##multi", &multiplier, 0, 0, "%f");
             ImGui::Dummy(ImVec2(10.0f, 0));
             ImGui::SameLine();
             if (ImGui::Button(u8"Транспонировать"))
@@ -234,7 +238,10 @@ int main(int, char**)
             ImGui::Dummy(ImVec2(61.0f, 0));
             ImGui::SameLine();
             if (ImGui::Button(u8"Возвести в степень"))
-                void;
+                m.degree(degree);
+            ImGui::SameLine();
+            ImGui::SetNextItemWidth(30);
+            ImGui::InputInt("##degree", &degree, 0, 0, 0);
 
             ImGui::Dummy(ImVec2(10.0f, 0));
             ImGui::SameLine();

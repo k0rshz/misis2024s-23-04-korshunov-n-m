@@ -30,7 +30,8 @@ int main() {
 	std::cout << c.determinant();
 	std::cout << "\n" << "\n";
 	
-	Matrix d(c.degree(2));
+	Matrix d = c;
+	d.degree(2);
 	d.print();
 
 	c.inverse();

@@ -19,7 +19,7 @@ public:
 	Matrix getMinor(int row, int col);
 	double determinant();
 	Matrix multiply(const Matrix& other);
-	Matrix degree(int a);
+	void degree(int a);
 	void swapRows(int a, int b);
 	void print();
 	void clear();

@@ -103,13 +103,13 @@ Matrix Matrix::multiply(const Matrix& other) {
 	return result;
 }
 
-Matrix Matrix::degree(int a) {
+void Matrix::degree(int a) {
 	Matrix res(*this);
 	Matrix temp(res);
 	for (int i = 0; i < a - 1; ++i) {
 		res = res.multiply(temp);
 	}
-	return res;
+	data_ = res.data_;
 }
 
 void Matrix::swapRows(int a, int b) {
