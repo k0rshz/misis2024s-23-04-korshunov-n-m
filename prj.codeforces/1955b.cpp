@@ -4,7 +4,7 @@
 int main() {
 	int m, n, b, l, res;
 	std::cin >> m;
-	std::vector <int> a(100);
+	std::vector <int> a(1000);
 	for (int i = 0; i < m; ++i) {
 		std::cin >> n;
 		for (int j = 0; j < n; ++j) {
