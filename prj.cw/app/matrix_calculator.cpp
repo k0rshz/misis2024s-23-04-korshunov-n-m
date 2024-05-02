@@ -127,7 +127,6 @@ int main(int, char**)
     bool showMatrixRank = false;
     double det = 0;
     bool showMatrixDet = false;
-    int x = 10;
 
     while (!done)
 #endif
@@ -184,14 +183,12 @@ int main(int, char**)
             static float f = 0.0f;
             static int counter = 0;
 
-            ImGui::Begin(u8"Матричный калькулятор");                          // Create a window called "Hello, world!" and append into it.
+            ImGui::Begin(u8"Матричный калькулятор", 0, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize);                          // Create a window called "Hello, world!" and append into it.
 
             ImGui::Text(u8"\t\t\t\t\t\t\t\t\t\tМатрица A");               // Display some text (you can use a format strings too)
 
             const float cellSize = 30.0f; // Размер каждой маленькой ячейки
             ImVec2 windowSize = ImGui::GetWindowSize();
-            //Matrix m(3, 3);
-            //double matrix[3][3];
             ImVec2 startPos((windowSize.x - cellSize * 3 - 45) / 2 - 15, (windowSize.y - cellSize * 3 - 10) / 2 - 60);
             const float inputWidth = 48.5f;
             for (int i = 0; i < 3; i++) {
@@ -279,9 +276,6 @@ int main(int, char**)
         }
 
         if (showMatrixRank) {
-            //if (showMatrixDet) {
-                //x = 289;
-            //}
             ImGui::SetNextWindowPos(ImVec2(289, 10), ImGuiCond_Always);
             ImGui::SetNextWindowBgAlpha(0.3f);
             ImGui::Begin("RankInfo", &showMatrixRank, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoSavedSettings);
@@ -290,13 +284,11 @@ int main(int, char**)
         }
 
         if (showMatrixDet) {
-            //if (showMatrixRank) {
-                //x = 130;
-            //}
             ImGui::SetNextWindowPos(ImVec2(10, 10), ImGuiCond_Always);
             ImGui::SetNextWindowBgAlpha(0.3f);
+            ImGui::SetNextWindowSize(ImVec2(250, 8), ImGuiCond_Always);
             ImGui::Begin("DetInfo", &showMatrixDet, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoSavedSettings);
-            ImGui::Text(u8"Определитель матрицы: %.2f", det);
+            ImGui::Text(u8"Определитель матрицы: %.4f", det);
             ImGui::End();
         }
 
