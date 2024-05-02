@@ -123,6 +123,12 @@ int main(int, char**)
     double multiplier = 1.0f;
     char userInput[20];
     int degree = 1;
+    int r = 0;
+    bool showMatrixRank = false;
+    double det = 0;
+    bool showMatrixDet = false;
+    int x = 10;
+
     while (!done)
 #endif
     {
@@ -187,7 +193,7 @@ int main(int, char**)
             //Matrix m(3, 3);
             //double matrix[3][3];
             ImVec2 startPos((windowSize.x - cellSize * 3 - 45) / 2 - 15, (windowSize.y - cellSize * 3 - 10) / 2 - 60);
-            const float inputWidth = 50.0f;
+            const float inputWidth = 48.5f;
             for (int i = 0; i < 3; i++) {
                 for (int j = 0; j < 3; j++) {
 
@@ -206,6 +212,7 @@ int main(int, char**)
 
             //ImGui::SliderFloat("float", &f, 0.0f, 1.0f);            // Edit 1 float using a slider from 0.0f to 1.0f
             //ImGui::ColorEdit3("clear color", (float*)&clear_color); // Edit 3 floats representing a color
+
             ImGui::Dummy(ImVec2(100.0f, 10.0f));
             ImGui::Dummy(ImVec2(10.0f, 0));
             ImGui::SameLine();
@@ -220,16 +227,19 @@ int main(int, char**)
 
             ImGui::Dummy(ImVec2(10.0f, 0));
             ImGui::SameLine();
-            if (ImGui::Button(u8"Найти ранг"))
-                void;
+            if (ImGui::Button(u8"Найти ранг")) {
+                r = m.rank();
+                showMatrixRank = true;
+            }
             ImGui::SameLine();
             ImGui::Dummy(ImVec2(104.0f, 0));
             ImGui::SameLine();
             if (ImGui::Button(u8"Умножить на"))
                 m.multi(multiplier);
             ImGui::SameLine();
-            ImGui::SetNextItemWidth(40);
+            ImGui::SetNextItemWidth(40.6);
             ImGui::InputDouble("##multi", &multiplier, 0, 0, "%f");
+
             ImGui::Dummy(ImVec2(10.0f, 0));
             ImGui::SameLine();
             if (ImGui::Button(u8"Транспонировать"))
@@ -240,18 +250,27 @@ int main(int, char**)
             if (ImGui::Button(u8"Возвести в степень"))
                 m.degree(degree);
             ImGui::SameLine();
-            ImGui::SetNextItemWidth(30);
+            ImGui::SetNextItemWidth(23);
             ImGui::InputInt("##degree", &degree, 0, 0, 0);
 
             ImGui::Dummy(ImVec2(10.0f, 0));
             ImGui::SameLine();
-            if (ImGui::Button(u8"Найти определитель"))
-                void;
+            if (ImGui::Button(u8"Найти определитель")) {
+                det = m.determinant();
+                showMatrixDet = true;
+            }
             ImGui::SameLine();
             ImGui::Dummy(ImVec2(38.0f, 0));
             ImGui::SameLine();
-            if (ImGui::Button(u8"Найти обратную матрицу"))
-                void;
+            if (ImGui::Button(u8"Найти обратную матрицу")) {
+                if (m.determinant() != 0) {
+                    m.inverse();
+                }
+                else {
+                    void;
+                }
+            }
+         
 
             //ImGui::Text("counter = %d", counter);
 
@@ -259,15 +278,38 @@ int main(int, char**)
             ImGui::End();
         }
 
-        // 3. Show another simple window.
-        if (show_another_window)
-        {
-            ImGui::Begin("Another Window", &show_another_window);   // Pass a pointer to our bool variable (the window will have a closing button that will clear the bool when clicked)
-            ImGui::Text("Hello from another window!");
-            if (ImGui::Button("Close Me"))
-                show_another_window = false;
+        if (showMatrixRank) {
+            //if (showMatrixDet) {
+                //x = 289;
+            //}
+            ImGui::SetNextWindowPos(ImVec2(289, 10), ImGuiCond_Always);
+            ImGui::SetNextWindowBgAlpha(0.3f);
+            ImGui::Begin("RankInfo", &showMatrixRank, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoSavedSettings);
+            ImGui::Text(u8"Ранг матрицы: %d", r);
             ImGui::End();
         }
+
+        if (showMatrixDet) {
+            //if (showMatrixRank) {
+                //x = 130;
+            //}
+            ImGui::SetNextWindowPos(ImVec2(10, 10), ImGuiCond_Always);
+            ImGui::SetNextWindowBgAlpha(0.3f);
+            ImGui::Begin("DetInfo", &showMatrixDet, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoSavedSettings);
+            ImGui::Text(u8"Определитель матрицы: %.2f", det);
+            ImGui::End();
+        }
+
+
+        // 3. Show another simple window.
+        //if (show_another_window)
+        //{
+        //    ImGui::Begin("Another Window", &show_another_window);   // Pass a pointer to our bool variable (the window will have a closing button that will clear the bool when clicked)
+        //    ImGui::Text("Hello from another window!");
+        //    if (ImGui::Button("Close Me"))
+        //        show_another_window = false;
+        //    ImGui::End();
+        //}
 
         // Rendering
         ImGui::Render();

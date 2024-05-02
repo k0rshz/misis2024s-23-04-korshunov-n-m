@@ -54,5 +54,16 @@ int main() {
 	b.print();
 	std::cout << b.rank() << "\n";
 
+	Matrix t(3, 3);
+	k = 0;
+	for (int i = 0; i < 3; ++i) {
+		for (int j = 0; j < 3; ++j) {
+			k += 1;
+			t.at(i, j) = k;
+		}
+	}
+	t.at(2, 2) = 10;
+	std::cout << t.determinant();
+
 	return 0;
 }
