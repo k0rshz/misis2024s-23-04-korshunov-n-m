@@ -27,6 +27,10 @@ public:
 	void addRowMultiple(int a, int b, double k);
 	void inverse();
 	Matrix identity();
+	void resize(int i, int j);
+	int rows() { return rows_; }
+	int cols() { return cols_; }
+
 private:
 	std::vector<std::vector<double>> data_{ {} };
 	int rows_ = 0;

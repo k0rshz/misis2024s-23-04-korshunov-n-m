@@ -63,7 +63,12 @@ int main() {
 		}
 	}
 	t.at(2, 2) = 10;
-	std::cout << t.determinant();
+	std::cout << t.determinant() << "\n";
+	t.print();
+	t.resize(4, 4);
+	t.print();
+	t.resize(2, 2);
+	t.print();
 
 	return 0;
 }

@@ -1,4 +1,4 @@
-// ImGui + SDL2
+п»ї// ImGui + SDL2
 #define SDL_MAIN_HANDLED
 
 #include "matrix/matrix.hpp"
@@ -76,7 +76,7 @@ int main(int, char**)
     ImGuiIO& io = ImGui::GetIO(); (void)io;
     io.Fonts->AddFontFromFileTTF("C:/Users/narut/my-project/f/Arial.ttf", 16.0f, NULL, io.Fonts->GetGlyphRangesCyrillic());
 
-    // Устанавливаем этот шрифт как основной для Dear ImGui и русский текст будет отображаться корректно
+    // РЈСЃС‚Р°РЅР°РІР»РёРІР°РµРј СЌС‚РѕС‚ С€СЂРёС„С‚ РєР°Рє РѕСЃРЅРѕРІРЅРѕР№ РґР»СЏ Dear ImGui Рё СЂСѓСЃСЃРєРёР№ С‚РµРєСЃС‚ Р±СѓРґРµС‚ РѕС‚РѕР±СЂР°Р¶Р°С‚СЊСЃСЏ РєРѕСЂСЂРµРєС‚РЅРѕ
     io.FontDefault = io.Fonts->Fonts.back();
     io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
     io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
@@ -119,7 +119,7 @@ int main(int, char**)
     io.IniFilename = nullptr;
     EMSCRIPTEN_MAINLOOP_BEGIN
 #else
-    Matrix m(3, 3);
+    Matrix mat(3, 3);
     double multiplier = 1.0f;
     char userInput[20];
     int degree = 1;
@@ -127,6 +127,8 @@ int main(int, char**)
     bool showMatrixRank = false;
     double det = 0;
     bool showMatrixDet = false;
+    int n = 3;
+    int m = 3;
 
     while (!done)
 #endif
@@ -146,21 +148,21 @@ int main(int, char**)
                 done = true;
             if (event.type == SDL_TEXTINPUT && ImGui::GetIO().WantCaptureKeyboard) {
                 if (event.text.text[0] == '\b' && strlen(userInput) > 0) {
-                    // Удаляем последний символ при нажатии Backspace
+                    // РЈРґР°Р»СЏРµРј РїРѕСЃР»РµРґРЅРёР№ СЃРёРјРІРѕР» РїСЂРё РЅР°Р¶Р°С‚РёРё Backspace
                     userInput[strlen(userInput) - 1] = '\0';
                 }
                 else if (event.text.text[0] >= 32 && event.text.text[0] <= 126 && strlen(userInput) < 19) {
-                    // Добавляем символ в пользовательский ввод
+                    // Р”РѕР±Р°РІР»СЏРµРј СЃРёРјРІРѕР» РІ РїРѕР»СЊР·РѕРІР°С‚РµР»СЊСЃРєРёР№ РІРІРѕРґ
                     strncat(userInput, reinterpret_cast<const char*>(&event.text.text), 1);
                 }
 
-                // Обновляем значение в активной ячейке
+                // РћР±РЅРѕРІР»СЏРµРј Р·РЅР°С‡РµРЅРёРµ РІ Р°РєС‚РёРІРЅРѕР№ СЏС‡РµР№РєРµ
                 if (ImGui::IsAnyItemActive()) {
                     int index = strlen(userInput) > 0 ? atoi(userInput) : 0;
-                    for (int i = 0; i < 3; i++) {
-                        for (int j = 0; j < 3; j++) {
+                    for (int i = 0; i < mat.rows(); ++i) {
+                        for (int j = 0; j < mat.cols(); ++j) {
                             if (ImGui::IsItemActive()) {
-                                m.at(i, j) = static_cast<double>(index);
+                                mat.at(i, j) = static_cast<double>(index);
                             }
                         }
                     }
@@ -174,104 +176,106 @@ int main(int, char**)
         ImGui::NewFrame();
         ImGuiStyle& style = ImGui::GetStyle();
         style.ItemSpacing = ImVec2(0, 12.0f);
-        // 1. Show the big demo window (Most of the sample code is in ImGui::ShowDemoWindow()! You can browse its code to learn more about Dear ImGui!).
-        /*if (show_demo_window)
-            ImGui::ShowDemoWindow(&show_demo_window);*/
 
-        // 2. Show a simple window that we create ourselves. We use a Begin/End pair to create a named window.
         {
             static float f = 0.0f;
             static int counter = 0;
 
-            ImGui::Begin(u8"Матричный калькулятор", 0, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize);                          // Create a window called "Hello, world!" and append into it.
+            ImGui::Begin(u8"РњР°С‚СЂРёС‡РЅС‹Р№ РєР°Р»СЊРєСѓР»СЏС‚РѕСЂ", 0, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize);                          // Create a window called "Hello, world!" and append into it.
 
-            ImGui::Text(u8"\t\t\t\t\t\t\t\t\t\tМатрица A");               // Display some text (you can use a format strings too)
+            ImGui::Text(u8"\t\t\t\t\t\t\t\t\t\tРњР°С‚СЂРёС†Р° A");               // Display some text (you can use a format strings too)
 
-            const float cellSize = 30.0f; // Размер каждой маленькой ячейки
+            const float cellSize = 30.0f; // Р Р°Р·РјРµСЂ РєР°Р¶РґРѕР№ РјР°Р»РµРЅСЊРєРѕР№ СЏС‡РµР№РєРё
             ImVec2 windowSize = ImGui::GetWindowSize();
-            ImVec2 startPos((windowSize.x - cellSize * 3 - 45) / 2 - 15, (windowSize.y - cellSize * 3 - 10) / 2 - 60);
+            ImVec2 startPos((windowSize.x - cellSize * 3 - 45) / 2 - 15 - 27 * (mat.cols() - 3), (windowSize.y - cellSize * 3 - 10) / 2 - 60);
             const float inputWidth = 48.5f;
-            for (int i = 0; i < 3; i++) {
-                for (int j = 0; j < 3; j++) {
+            for (int i = 0; i < mat.rows(); ++i) {
+                for (int j = 0; j < mat.cols(); ++j) {
 
                     ImGui::SetCursorPos(startPos);
                     ImGui::SetNextItemWidth(inputWidth);
-                    ImGui::InputDouble(("##cell" + std::to_string(i) + std::to_string(j)).c_str(), &m.at(i, j), 0, 0, "%f");
+                    ImGui::InputDouble(("##cell" + std::to_string(i) + std::to_string(j)).c_str(), &mat.at(i, j), 0, 0, "%f");
          
-                    startPos.x += cellSize + 25.0f; // Увеличиваем X координату для следующей ячейки
+                    startPos.x += cellSize + 25.0f; // РЈРІРµР»РёС‡РёРІР°РµРј X РєРѕРѕСЂРґРёРЅР°С‚Сѓ РґР»СЏ СЃР»РµРґСѓСЋС‰РµР№ СЏС‡РµР№РєРё
                 }
-                startPos.x = (windowSize.x - cellSize * 3 - 45) / 2 - 15; // Возвращаем X координату в начало строки
-                startPos.y += cellSize + 5.0f; // Увеличиваем Y координату для следующей строки
+                startPos.x = (windowSize.x - cellSize * 3 - 45) / 2 - 15 - 27 * (mat.cols() - 3); // Р’РѕР·РІСЂР°С‰Р°РµРј X РєРѕРѕСЂРґРёРЅР°С‚Сѓ РІ РЅР°С‡Р°Р»Рѕ СЃС‚СЂРѕРєРё
+                startPos.y += cellSize + 5.0f; // РЈРІРµР»РёС‡РёРІР°РµРј Y РєРѕРѕСЂРґРёРЅР°С‚Сѓ РґР»СЏ СЃР»РµРґСѓСЋС‰РµР№ СЃС‚СЂРѕРєРё
             }
             
-            //ImGui::Checkbox("Demo Window", &show_demo_window);      // Edit bools storing our window open/close state
-            //ImGui::Checkbox("Another Window", &show_another_window);
-
-            //ImGui::SliderFloat("float", &f, 0.0f, 1.0f);            // Edit 1 float using a slider from 0.0f to 1.0f
-            //ImGui::ColorEdit3("clear color", (float*)&clear_color); // Edit 3 floats representing a color
 
             ImGui::Dummy(ImVec2(100.0f, 10.0f));
             ImGui::Dummy(ImVec2(10.0f, 0));
             ImGui::SameLine();
-            if (ImGui::Button(u8"Очистить")) {
-                m.clear();
+            if (ImGui::Button(u8"РћС‡РёСЃС‚РёС‚СЊ")) {
+                mat.clear();
             }
             ImGui::SameLine();
             ImGui::Dummy(ImVec2(115.0f, 0));
             ImGui::SameLine();
-            if (ImGui::Button(u8"Размер:"))
-                void;
+            if (ImGui::Button(u8"Р Р°Р·РјРµСЂ:"))
+                mat.resize(n, m);
+            ImGui::SameLine();
+            ImGui::Dummy(ImVec2(5.0f, 0));
+            ImGui::SameLine();
+            ImGui::SetNextItemWidth(17);
+            ImGui::InputInt("##n", &n, 0, 0, 0);
+            ImGui::SameLine();
+            ImGui::Dummy(ImVec2(3.0f, 0));
+            ImGui::SameLine();
+            ImGui::Text(u8"Г—");
+            ImGui::SameLine();
+            ImGui::Dummy(ImVec2(3.0f, 0));
+            ImGui::SameLine();
+            ImGui::SetNextItemWidth(17);
+            ImGui::InputInt("##m", &m, 0, 0, 0);
+
 
             ImGui::Dummy(ImVec2(10.0f, 0));
             ImGui::SameLine();
-            if (ImGui::Button(u8"Найти ранг")) {
-                r = m.rank();
+            if (ImGui::Button(u8"РќР°Р№С‚Рё СЂР°РЅРі")) {
+                r = mat.rank();
                 showMatrixRank = true;
             }
             ImGui::SameLine();
             ImGui::Dummy(ImVec2(104.0f, 0));
             ImGui::SameLine();
-            if (ImGui::Button(u8"Умножить на"))
-                m.multi(multiplier);
+            if (ImGui::Button(u8"РЈРјРЅРѕР¶РёС‚СЊ РЅР°"))
+                mat.multi(multiplier);
             ImGui::SameLine();
             ImGui::SetNextItemWidth(40.6);
             ImGui::InputDouble("##multi", &multiplier, 0, 0, "%f");
 
             ImGui::Dummy(ImVec2(10.0f, 0));
             ImGui::SameLine();
-            if (ImGui::Button(u8"Транспонировать"))
-                m.transpose();
+            if (ImGui::Button(u8"РўСЂР°РЅСЃРїРѕРЅРёСЂРѕРІР°С‚СЊ"))
+                mat.transpose();
             ImGui::SameLine();
             ImGui::Dummy(ImVec2(61.0f, 0));
             ImGui::SameLine();
-            if (ImGui::Button(u8"Возвести в степень"))
-                m.degree(degree);
+            if (ImGui::Button(u8"Р’РѕР·РІРµСЃС‚Рё РІ СЃС‚РµРїРµРЅСЊ"))
+                mat.degree(degree);
             ImGui::SameLine();
             ImGui::SetNextItemWidth(23);
             ImGui::InputInt("##degree", &degree, 0, 0, 0);
 
             ImGui::Dummy(ImVec2(10.0f, 0));
             ImGui::SameLine();
-            if (ImGui::Button(u8"Найти определитель")) {
-                det = m.determinant();
+            if (ImGui::Button(u8"РќР°Р№С‚Рё РѕРїСЂРµРґРµР»РёС‚РµР»СЊ")) {
+                det = mat.determinant();
                 showMatrixDet = true;
             }
             ImGui::SameLine();
             ImGui::Dummy(ImVec2(38.0f, 0));
             ImGui::SameLine();
-            if (ImGui::Button(u8"Найти обратную матрицу")) {
-                if (m.determinant() != 0) {
-                    m.inverse();
+            if (ImGui::Button(u8"РќР°Р№С‚Рё РѕР±СЂР°С‚РЅСѓСЋ РјР°С‚СЂРёС†Сѓ")) {
+                if (mat.determinant() != 0) {
+                    mat.inverse();
                 }
                 else {
                     void;
                 }
             }
-         
 
-            //ImGui::Text("counter = %d", counter);
-
-            //ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / io.Framerate, io.Framerate);
             ImGui::End();
         }
 
@@ -279,7 +283,7 @@ int main(int, char**)
             ImGui::SetNextWindowPos(ImVec2(289, 10), ImGuiCond_Always);
             ImGui::SetNextWindowBgAlpha(0.3f);
             ImGui::Begin("RankInfo", &showMatrixRank, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoSavedSettings);
-            ImGui::Text(u8"Ранг матрицы: %d", r);
+            ImGui::Text(u8"Р Р°РЅРі РјР°С‚СЂРёС†С‹: %d", r);
             ImGui::End();
         }
 
@@ -288,20 +292,9 @@ int main(int, char**)
             ImGui::SetNextWindowBgAlpha(0.3f);
             ImGui::SetNextWindowSize(ImVec2(250, 8), ImGuiCond_Always);
             ImGui::Begin("DetInfo", &showMatrixDet, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoSavedSettings);
-            ImGui::Text(u8"Определитель матрицы: %.4f", det);
+            ImGui::Text(u8"РћРїСЂРµРґРµР»РёС‚РµР»СЊ РјР°С‚СЂРёС†С‹: %.4f", det);
             ImGui::End();
         }
-
-
-        // 3. Show another simple window.
-        //if (show_another_window)
-        //{
-        //    ImGui::Begin("Another Window", &show_another_window);   // Pass a pointer to our bool variable (the window will have a closing button that will clear the bool when clicked)
-        //    ImGui::Text("Hello from another window!");
-        //    if (ImGui::Button("Close Me"))
-        //        show_another_window = false;
-        //    ImGui::End();
-        //}
 
         // Rendering
         ImGui::Render();
