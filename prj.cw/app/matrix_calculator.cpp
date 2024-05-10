@@ -129,6 +129,7 @@ int main(int, char**)
     bool showMatrixDet = false;
     int n = 3;
     int m = 3;
+    bool error_det = false;
 
     while (!done)
 #endif
@@ -213,6 +214,9 @@ int main(int, char**)
             ImGui::Dummy(ImVec2(115.0f, 0));
             ImGui::SameLine();
             if (ImGui::Button(u8"Размер:"))
+                if (mat.cols() == mat.rows()) {
+                    error_det = false;
+                }
                 mat.resize(n, m);
             ImGui::SameLine();
             ImGui::Dummy(ImVec2(5.0f, 0));
@@ -261,8 +265,14 @@ int main(int, char**)
             ImGui::Dummy(ImVec2(10.0f, 0));
             ImGui::SameLine();
             if (ImGui::Button(u8"Найти определитель")) {
-                det = mat.determinant();
-                showMatrixDet = true;
+                if (mat.cols() != mat.rows()) {
+                    error_det = true;
+                }
+                else {
+                    det = mat.determinant();
+                    error_det = false;
+                    showMatrixDet = true;
+                }
             }
             ImGui::SameLine();
             ImGui::Dummy(ImVec2(38.0f, 0));
@@ -293,6 +303,15 @@ int main(int, char**)
             ImGui::SetNextWindowSize(ImVec2(250, 8), ImGuiCond_Always);
             ImGui::Begin("DetInfo", &showMatrixDet, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoSavedSettings);
             ImGui::Text(u8"Определитель матрицы: %.4f", det);
+            ImGui::End();
+        }
+
+        if (error_det)
+        {
+            ImGui::SetNextWindowPos(ImVec2(10, 40));
+            ImGui::SetNextWindowSize(ImVec2(480, 60)); 
+            ImGui::Begin(u8"Ошибка", &error_det, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize);   
+            ImGui::Text(u8"Матрица должна быть квадратной для нахождения определителя!");
             ImGui::End();
         }
 
