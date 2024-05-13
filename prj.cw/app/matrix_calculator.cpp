@@ -182,9 +182,12 @@ int main(int, char**)
             static float f = 0.0f;
             static int counter = 0;
 
-            ImGui::Begin(u8"Матричный калькулятор", 0, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize);                          // Create a window called "Hello, world!" and append into it.
+            ImGui::SetNextWindowPos(ImVec2(11, 45));
+            ImGui::SetNextWindowSize(ImVec2(439, 349));
 
-            ImGui::Text(u8"\t\t\t\t\t\t\t\t\t\tМатрица A");               // Display some text (you can use a format strings too)
+            ImGui::Begin(u8"Матричный калькулятор", 0, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize);                          
+
+            ImGui::Text(u8"\t\t\t\t\t\t\t\t\t\t\tМатрица A");          
 
             const float cellSize = 30.0f; // Размер каждой маленькой ячейки
             ImVec2 windowSize = ImGui::GetWindowSize();
@@ -211,7 +214,7 @@ int main(int, char**)
                 mat.clear();
             }
             ImGui::SameLine();
-            ImGui::Dummy(ImVec2(115.0f, 0));
+            ImGui::Dummy(ImVec2(115.0f + 35, 0));
             ImGui::SameLine();
             if (ImGui::Button(u8"Размер:"))
                 if (mat.cols() == mat.rows()) {
@@ -241,7 +244,7 @@ int main(int, char**)
                 showMatrixRank = true;
             }
             ImGui::SameLine();
-            ImGui::Dummy(ImVec2(104.0f, 0));
+            ImGui::Dummy(ImVec2(104.0f + 35, 0));
             ImGui::SameLine();
             if (ImGui::Button(u8"Умножить на"))
                 mat.multi(multiplier);
@@ -254,7 +257,7 @@ int main(int, char**)
             if (ImGui::Button(u8"Транспонировать"))
                 mat.transpose();
             ImGui::SameLine();
-            ImGui::Dummy(ImVec2(61.0f, 0));
+            ImGui::Dummy(ImVec2(61.0f + 35, 0));
             ImGui::SameLine();
             if (ImGui::Button(u8"Возвести в степень"))
                 mat.degree(degree);
@@ -275,7 +278,7 @@ int main(int, char**)
                 }
             }
             ImGui::SameLine();
-            ImGui::Dummy(ImVec2(38.0f, 0));
+            ImGui::Dummy(ImVec2(38.0f + 35, 0));
             ImGui::SameLine();
             if (ImGui::Button(u8"Найти обратную матрицу")) {
                 if (mat.determinant() != 0) {
@@ -286,11 +289,13 @@ int main(int, char**)
                 }
             }
 
+            ImGui::Dummy(ImVec2(0, 10));
+
             ImGui::End();
         }
 
         if (showMatrixRank) {
-            ImGui::SetNextWindowPos(ImVec2(289, 10), ImGuiCond_Always);
+            ImGui::SetNextWindowPos(ImVec2(323, 10), ImGuiCond_Always);
             ImGui::SetNextWindowBgAlpha(0.3f);
             ImGui::Begin("RankInfo", &showMatrixRank, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoSavedSettings);
             ImGui::Text(u8"Ранг матрицы: %d", r);
@@ -308,7 +313,7 @@ int main(int, char**)
 
         if (error_det)
         {
-            ImGui::SetNextWindowPos(ImVec2(10, 40));
+            ImGui::SetNextWindowPos(ImVec2(10, 44));
             ImGui::SetNextWindowSize(ImVec2(480, 60)); 
             ImGui::Begin(u8"Ошибка", &error_det, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize);   
             ImGui::Text(u8"Матрица должна быть квадратной для нахождения определителя!");
