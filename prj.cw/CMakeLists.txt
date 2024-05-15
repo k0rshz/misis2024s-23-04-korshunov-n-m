@@ -19,9 +19,9 @@ set(PRJ_MAIN app/matrix_calculator.cpp)
 set(PRJ_LIBRARIES 
     fmt::fmt
     # sdl2
-    $<TARGET_NAME_IF_EXISTS:SDL2::SDL2main>
-    $<IF:$<TARGET_EXISTS:SDL2::SDL2>,SDL2::SDL2,SDL2::SDL2-static>
-    #SDL2::SDL2
+    #$<TARGET_NAME_IF_EXISTS:SDL2::SDL2main>
+    #$<IF:$<TARGET_EXISTS:SDL2::SDL2>,SDL2::SDL2,SDL2::SDL2-static>
+    SDL2::SDL2
     # imgui
     imgui::imgui
     # opengl

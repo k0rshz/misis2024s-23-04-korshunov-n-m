@@ -253,13 +253,18 @@ void Matrix::inverse() {
 }
 
 void Matrix::resize(int i, int j) {
-	Matrix a(i, j);
-	for (int n = 0; n < i && n < rows_; ++n) {
-		for (int m = 0; m < j && m < cols_; ++m) {
-			a.at(n, m) = data_[n][m];
-		}
+	if (i < 1 || j < 1) {
+		throw std::out_of_range("Index out of range");
 	}
-	data_ = a.data_;
-	rows_ = i;
-	cols_ = j;
+	else {
+		Matrix a(i, j);
+		for (int n = 0; n < i && n < rows_; ++n) {
+			for (int m = 0; m < j && m < cols_; ++m) {
+				a.at(n, m) = data_[n][m];
+			}
+		}
+		data_ = a.data_;
+		rows_ = i;
+		cols_ = j;
+	}
 }

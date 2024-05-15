@@ -2,14 +2,14 @@
 #define SDL_MAIN_HANDLED
 
 #include "matrix/matrix.hpp"
-#include <SDL2/SDL.h>
+#include <SDL.h>
 #include <imgui.h>
 #include <imgui_impl_opengl3.h>
 #include <imgui_impl_sdl2.h>
 #if defined(IMGUI_IMPL_OPENGL_ES2)
-#include <SDL2/SDL_opengles2.h>
+#include <SDL_opengles2.h>
 #else
-#include <SDL2/SDL_opengl.h>
+#include <SDL_opengl.h>
 #endif
 // fmt
 #include <fmt/core.h>
@@ -130,6 +130,9 @@ int main(int, char**)
     int n = 3;
     int m = 3;
     bool error_det = false;
+    bool error_size = false;
+    bool error_size_1 = false;
+    bool flag_size = true;
 
     while (!done)
 #endif
@@ -189,7 +192,7 @@ int main(int, char**)
 
             ImGui::Text(u8"\t\t\t\t\t\t\t\t\t\t\tМатрица A");          
 
-            const float cellSize = 30.0f; // Размер каждой маленькой ячейки
+            const float cellSize = 30.0f;
             ImVec2 windowSize = ImGui::GetWindowSize();
             ImVec2 startPos((windowSize.x - cellSize * 3 - 45) / 2 - 15 - 27 * (mat.cols() - 3), (windowSize.y - cellSize * 3 - 10) / 2 - 60);
             const float inputWidth = 48.5f;
@@ -200,10 +203,10 @@ int main(int, char**)
                     ImGui::SetNextItemWidth(inputWidth);
                     ImGui::InputDouble(("##cell" + std::to_string(i) + std::to_string(j)).c_str(), &mat.at(i, j), 0, 0, "%f");
          
-                    startPos.x += cellSize + 25.0f; // Увеличиваем X координату для следующей ячейки
+                    startPos.x += cellSize + 25.0f; 
                 }
-                startPos.x = (windowSize.x - cellSize * 3 - 45) / 2 - 15 - 27 * (mat.cols() - 3); // Возвращаем X координату в начало строки
-                startPos.y += cellSize + 5.0f; // Увеличиваем Y координату для следующей строки
+                startPos.x = (windowSize.x - cellSize * 3 - 45) / 2 - 15 - 27 * (mat.cols() - 3);
+                startPos.y += cellSize + 5.0f; 
             }
             
 
@@ -216,11 +219,19 @@ int main(int, char**)
             ImGui::SameLine();
             ImGui::Dummy(ImVec2(115.0f + 35, 0));
             ImGui::SameLine();
-            if (ImGui::Button(u8"Размер:"))
+            if (ImGui::Button(u8"Размер:")) {
                 if (mat.cols() == mat.rows()) {
                     error_det = false;
                 }
-                mat.resize(n, m);
+                if (n < 1 || m < 1 || n > 7 || m > 7) {
+                    error_size = true;
+                }
+                else {
+                    error_size = false;
+                    mat.resize(n, m);
+                }
+                
+            }
             ImGui::SameLine();
             ImGui::Dummy(ImVec2(5.0f, 0));
             ImGui::SameLine();
@@ -315,8 +326,17 @@ int main(int, char**)
         {
             ImGui::SetNextWindowPos(ImVec2(10, 44));
             ImGui::SetNextWindowSize(ImVec2(480, 60)); 
-            ImGui::Begin(u8"Ошибка", &error_det, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize);   
+            ImGui::Begin(u8"Ошибка", &error_det, ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoResize);
             ImGui::Text(u8"Матрица должна быть квадратной для нахождения определителя!");
+            ImGui::End();
+        }
+
+        if (error_size)
+        {
+            ImGui::SetNextWindowPos(ImVec2(10, 44));
+            ImGui::SetNextWindowSize(ImVec2(480, 87));
+            ImGui::Begin(u8"Ошибка", &error_size, ImGuiWindowFlags_NoResize);
+            ImGui::Text(u8"Минимальный размер матрицы: 1 × 1\n\nМаксимальный размер матрицы, который вы можете выбрать: 7 × 7");
             ImGui::End();
         }
 
