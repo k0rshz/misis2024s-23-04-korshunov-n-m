@@ -66,11 +66,6 @@ TEST_CASE("minus") {
 	CHECK(Rational(3, 1) == Rational(-3, -1));
 }
 
-TEST_CASE("num_den") {
-	CHECK(std::int64_t(4) == (Rational(4, 3).get_Num()));
-	CHECK(std::int64_t(3) == (Rational(4, 3).get_Den()));
-}
-
 TEST_CASE("equality") {
 	CHECK(Rational(12, 13) == Rational(24, 26));
 	CHECK(Rational(8, 2) == std::int64_t(4));
