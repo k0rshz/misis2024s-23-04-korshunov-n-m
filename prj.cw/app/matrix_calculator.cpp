@@ -89,23 +89,6 @@ int main(int, char**)
     ImGui_ImplSDL2_InitForOpenGL(window, gl_context);
     ImGui_ImplOpenGL3_Init(glsl_version);
 
-    // Load Fonts
-    // - If no fonts are loaded, dear imgui will use the default font. You can also load multiple fonts and use ImGui::PushFont()/PopFont() to select them.
-    // - AddFontFromFileTTF() will return the ImFont* so you can store it if you need to select the font among multiple.
-    // - If the file cannot be loaded, the function will return a nullptr. Please handle those errors in your application (e.g. use an assertion, or display an error and quit).
-    // - The fonts will be rasterized at a given size (w/ oversampling) and stored into a texture when calling ImFontAtlas::Build()/GetTexDataAsXXXX(), which ImGui_ImplXXXX_NewFrame below will call.
-    // - Use '#define IMGUI_ENABLE_FREETYPE' in your imconfig file to use Freetype for higher quality font rendering.
-    // - Read 'docs/FONTS.md' for more instructions and details.
-    // - Remember that in C/C++ if you want to include a backslash \ in a string literal you need to write a double backslash \\ !
-    // - Our Emscripten build process allows embedding fonts to be accessible at runtime from the "fonts/" folder. See Makefile.emscripten for details.
-    //io.Fonts->AddFontDefault();
-    //io.Fonts->AddFontFromFileTTF("c:\\Windows\\Fonts\\segoeui.ttf", 18.0f);
-    //io.Fonts->AddFontFromFileTTF("../../misc/fonts/DroidSans.ttf", 16.0f);
-    //io.Fonts->AddFontFromFileTTF("../../misc/fonts/Roboto-Medium.ttf", 16.0f);
-    //io.Fonts->AddFontFromFileTTF("../../misc/fonts/Cousine-Regular.ttf", 15.0f);
-    //ImFont* font = io.Fonts->AddFontFromFileTTF("c:\\Windows\\Fonts\\ArialUni.ttf", 18.0f, nullptr, io.Fonts->GetGlyphRangesJapanese());
-    //IM_ASSERT(font != nullptr);
-
     // Our state
     bool show_demo_window = true;
     bool show_another_window = false;
@@ -114,8 +97,6 @@ int main(int, char**)
     // Main loop
     bool done = false;
 #ifdef __EMSCRIPTEN__
-    // For an Emscripten build we are disabling file-system access, so let's not attempt to do a fopen() of the imgui.ini file.
-    // You may manually call LoadIniSettingsFromMemory() to load settings from your own storage.
     io.IniFilename = nullptr;
     EMSCRIPTEN_MAINLOOP_BEGIN
 #else
@@ -131,17 +112,13 @@ int main(int, char**)
     int m = 3;
     bool error_det = false;
     bool error_size = false;
-    bool error_size_1 = false;
-    bool flag_size = true;
+    bool error_inv = false;
+    int t = 0;
 
     while (!done)
 #endif
     {
         // Poll and handle events (inputs, window resize, etc.)
-        // You can read the io.WantCaptureMouse, io.WantCaptureKeyboard flags to tell if dear imgui wants to use your inputs.
-        // - When io.WantCaptureMouse is true, do not dispatch mouse input data to your main application, or clear/overwrite your copy of the mouse data.
-        // - When io.WantCaptureKeyboard is true, do not dispatch keyboard input data to your main application, or clear/overwrite your copy of the keyboard data.
-        // Generally you may always pass all inputs to dear imgui, and hide them from your application based on those two flags.
         SDL_Event event;
         while (SDL_PollEvent(&event))
         {
@@ -152,15 +129,12 @@ int main(int, char**)
                 done = true;
             if (event.type == SDL_TEXTINPUT && ImGui::GetIO().WantCaptureKeyboard) {
                 if (event.text.text[0] == '\b' && strlen(userInput) > 0) {
-                    // Удаляем последний символ при нажатии Backspace
                     userInput[strlen(userInput) - 1] = '\0';
                 }
                 else if (event.text.text[0] >= 32 && event.text.text[0] <= 126 && strlen(userInput) < 19) {
-                    // Добавляем символ в пользовательский ввод
                     strncat(userInput, reinterpret_cast<const char*>(&event.text.text), 1);
                 }
 
-                // Обновляем значение в активной ячейке
                 if (ImGui::IsAnyItemActive()) {
                     int index = strlen(userInput) > 0 ? atoi(userInput) : 0;
                     for (int i = 0; i < mat.rows(); ++i) {
@@ -265,8 +239,12 @@ int main(int, char**)
 
             ImGui::Dummy(ImVec2(10.0f, 0));
             ImGui::SameLine();
-            if (ImGui::Button(u8"Транспонировать"))
+            if (ImGui::Button(u8"Транспонировать")) {
                 mat.transpose();
+                t = n;
+                n = m;
+                m = t;
+            }
             ImGui::SameLine();
             ImGui::Dummy(ImVec2(61.0f + 35, 0));
             ImGui::SameLine();
@@ -292,11 +270,17 @@ int main(int, char**)
             ImGui::Dummy(ImVec2(38.0f + 35, 0));
             ImGui::SameLine();
             if (ImGui::Button(u8"Найти обратную матрицу")) {
-                if (mat.determinant() != 0) {
-                    mat.inverse();
+                if (mat.cols() == mat.rows()) {
+                    if (mat.determinant() != 0) {
+                        mat.inverse();
+                        error_inv = false;
+                    }
+                    else {
+                        error_inv = true;
+                    }
                 }
                 else {
-                    void;
+                    error_inv = true;
                 }
             }
 
@@ -326,7 +310,7 @@ int main(int, char**)
         {
             ImGui::SetNextWindowPos(ImVec2(10, 44));
             ImGui::SetNextWindowSize(ImVec2(480, 60)); 
-            ImGui::Begin(u8"Ошибка", &error_det, ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoResize);
+            ImGui::Begin(u8"Ошибка", &error_det, ImGuiWindowFlags_NoResize);
             ImGui::Text(u8"Матрица должна быть квадратной для нахождения определителя!");
             ImGui::End();
         }
@@ -337,6 +321,15 @@ int main(int, char**)
             ImGui::SetNextWindowSize(ImVec2(480, 87));
             ImGui::Begin(u8"Ошибка", &error_size, ImGuiWindowFlags_NoResize);
             ImGui::Text(u8"Минимальный размер матрицы: 1 × 1\n\nМаксимальный размер матрицы, который вы можете выбрать: 7 × 7");
+            ImGui::End();
+        }
+
+        if (error_inv)
+        {
+            ImGui::SetNextWindowPos(ImVec2(10, 44));
+            ImGui::SetNextWindowSize(ImVec2(520, 70));
+            ImGui::Begin(u8"Ошибка", &error_inv, ImGuiWindowFlags_NoResize);
+            ImGui::Text(u8"Для нахождения обратной матрицы изначальная матрица должна быть \nквадратной, и её определитель не должен равняться нулю!");
             ImGui::End();
         }
 
